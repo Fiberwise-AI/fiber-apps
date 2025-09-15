@@ -1,0 +1,21 @@
+{
+  "name": "wiki-test-app",
+  "version": "0.0.3",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "watch": "vite build --watch"
+  },
+  "author": "FiberWise",
+  "license": "ISC",
+  "description": "Wiki-style app demonstrating mixed isolation - public pages with user-tracked edit history",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "fiberwise": "file:../../../fiber-sdk-nodejs"
+  },
+  "devDependencies": {
+    "vite": "^6.2.5"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "name": "knowledge-builder-pro",
+  "version": "1.0.0",
+  "description": "Advanced knowledge building app with deep research pipelines using Wikipedia API, web scraping, and conversational analysis",
+  "main": "index.js",
+  "keywords": [
+    "knowledge-building",
+    "research",
+    "wikipedia",
+    "web-scraping",
+    "ai-agents",
+    "pipelines",
+    "fiberwise"
+  ],
+  "author": "FiberWise Platform",
+  "license": "MIT",
+  "dependencies": {
+    "@fiberwise/sdk": "^1.0.0",
+    "playwright": "^1.40.0",
+    "axios": "^1.6.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js",
+    "test-connectivity": "node -e \"require('./index.js').testConnectivity().then(console.log)\"",
+    "list-components": "node -e \"require('./index.js').getAvailableComponents().then(console.log)\""
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "fiberwise-apps/knowledge-builder-pro"
+  },
+  "fiberwise": {
+    "app_type": "research_pipeline",
+    "version": "1.0.0",
+    "components": {
+      "functions": [
+        "functions/wikipedia_api_scraper.py",
+        "functions/synthesize_knowledge.py"
+      ],
+      "agents": [
+        "agents/playwright_scraper_agent.py",
+        "agents/research_coordinator_agent.py",
+        "agents/domain_expert_agent.py",
+        "agents/hypothesis_agent.py",
+        "agents/data_processor_agent.py"
+      ],
+      "pipelines": [
+        "pipelines/knowledge_builder_pipeline.py"
+      ],
+      "ui_components": [
+        "components/knowledge-builder-pro.js"
+      ]
+    },
+    "capabilities": [
+      "wikipedia_research",
+      "web_scraping",
+      "knowledge_synthesis",
+      "conversational_analysis",
+      "data_processing",
+      "research_validation"
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+app:
+  name: Data Save Test App
+  app_slug: data-save-test-app
+  version: 0.0.5
+  description: A professional application for testing data saving functionality in
+    FiberWise with real-time updates and comprehensive error handling
+  entryPoint: index.js
+  icon: fas fa-database
+  category: simple
+  publisher: FiberWise
+  models:
+  - name: Test Analysis
+    model_slug: test_analyses
+    description: Data model for storing test analysis results
+    fields:
+    - name: Test ID
+      field_column: test_id
+      type: uuid
+      required: true
+      is_primary_key: true
+      description: Unique identifier for each test
+    - name: Test Message
+      field_column: test_message
+      type: text
+      required: true
+      description: The original test message content
+    - name: Analysis Result
+      field_column: analysis_result
+      type: text
+      required: true
+      description: Results from the analysis process
+    - name: Test Category
+      field_column: test_category
+      type: string
+      required: true
+      default: general
+      description: Category type for the test
+    - name: Metadata
+      field_column: metadata
+      type: json
+      description: Additional metadata and processing information
+    - name: Created At
+      field_column: created_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+  routes:
+  - path: /
+    component: data-test-app
+    title: Data Test
+    icon: fas fa-database
+agents:
+- name: DataTestAgent
+  agent_slug: data-test-agent
+  agent_type_id: custom
+  version: 1.0.0
+  description: A simple agent to test data saving functionality with optional LLM
+    analysis
+  implementation_path: agents/data_test_agent.py
+  language: python

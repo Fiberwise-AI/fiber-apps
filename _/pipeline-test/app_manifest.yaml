@@ -1,0 +1,71 @@
+agents:
+- agent_type_id: custom
+  description: Simple test agent that responds with LLM-generated content
+  implementation_path: agents/test_agent.py
+  language: python
+  name: TestAgent
+  version: 0.0.1
+
+app:
+  app_slug: pipeline-test
+  category: simple
+  description: Simple pipeline testing app with button-triggered pipeline execution
+  entryPoint: index.js
+  icon: fas fa-flask
+  models:
+  - description: Test data for pipeline execution results
+    fields:
+    - description: Primary key for test record
+      field_column: test_id
+      is_primary_key: true
+      name: Test ID
+      required: true
+      type: uuid
+    - field_column: test_name
+      name: Test Name
+      required: true
+      type: string
+    - field_column: input_data
+      name: Input Data
+      type: text
+    - field_column: pipeline_result
+      name: Pipeline Result
+      type: text
+    - field_column: status
+      name: Status
+      type: string
+      default: pending
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    model_slug: test_results
+    name: TestResult
+  name: Pipeline Test
+  publisher: FiberWise
+  routes:
+  - component: pipeline-test-app
+    icon: fas fa-flask
+    path: /
+    title: Pipeline Test
+  version: 0.0.1
+
+pipelines:
+- name: "Simple Test Pipeline"
+  description: "Manual trigger pipeline that calls TestAgent and stores results"
+  is_active: true
+  trigger_config:
+    type: "manual"
+    config: {}
+  definition:
+    nodes:
+      - id: "node_1_agent"
+        type: "agent"
+        position: { x: 200, y: 150 }
+        data:
+          label: "Test Agent Call"
+          agentId: "TestAgent"
+          config:
+            prompt_template: "Process this input: {input_text}"
+    edges: []

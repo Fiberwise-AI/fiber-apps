@@ -1,0 +1,26 @@
+{
+  "name": "simple-test-pipeline",
+  "version": "1.0.0",
+  "description": "Simple 2-step 2-agent test pipeline application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "python -m pytest tests/",
+    "test-agents": "python tests/test_agents.py",
+    "test-pipeline": "python pipeline/main.py"
+  },
+  "keywords": [
+    "pipeline",
+    "agents",
+    "text-processing",
+    "fiberwise"
+  ],
+  "author": "FiberWise",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^4.4.0"
+  }
+}

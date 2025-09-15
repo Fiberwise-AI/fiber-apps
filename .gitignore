@@ -1,0 +1,10 @@
+**/node_modules/
+.aider*
+**/.fiber/
+**/dist/
+**/__pycache__/
+
+email-agent-app/.fiber/*
+data-save-test-app/.fiber/local/app.json
+email-agent-app/.fiber/local/app.json
+data-save-test-app/.fiber/local/app.json

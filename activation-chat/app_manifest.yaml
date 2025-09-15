@@ -1,0 +1,46 @@
+app:
+  name: Activation Chat
+  app_slug: activation-chat
+  version: 0.0.3
+  description: A chat application that uses agent activations and dynamic data as
+    the message store
+  entryPoint: index.js
+  icon: fas fa-comments
+  category: simple
+  publisher: Fiberwise
+  user_isolation: enforced
+  models:
+  - name: Chat
+    model_slug: chats
+    description: Simple chat session container
+    fields:
+    - name: Chat ID
+      field_column: chat_id
+      type: uuid
+      required: true
+      is_primary_key: true
+      description: Primary key used as chat_id in agent activation context
+    - name: Title
+      field_column: title
+      type: string
+      required: true
+      default: New Chat
+    - name: Created At
+      field_column: created_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+  routes:
+  - path: /
+    component: chat-app
+    title: Chat
+    icon: fas fa-comments
+agents:
+- name: Chat Agent
+  agent_slug: chat-agent
+  agent_type_id: llm
+  version: 1.0.0
+  description: AI agent for handling chat conversations
+  system_prompt: You are a helpful AI assistant for chat conversations.
+  temperature: 0.7
+  max_tokens: 2048

@@ -1,0 +1,54 @@
+{
+  "name": "pipeline-tester-pro",
+  "version": "1.0.0",
+  "description": "Advanced pipeline testing and development platform for FiberWise",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "watch": "vite build --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [
+    "pipeline",
+    "testing",
+    "fiberwise",
+    "automation",
+    "development",
+    "analytics"
+  ],
+  "author": "FiberWise Team",
+  "license": "MIT",
+  "dependencies": {
+    "fiberwise": "file:../../fiber-sdk-nodejs",
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
+    "lodash-es": "^4.17.21",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/core": "^7.23.0",
+    "babel-jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fiberwise/pipeline-tester-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fiberwise/pipeline-tester-pro/issues"
+  },
+  "homepage": "https://github.com/fiberwise/pipeline-tester-pro#readme"
+}

@@ -1,0 +1,150 @@
+
+# Project Container App Manifest
+# Defines the app structure and data models
+app:
+  name: Project Container
+  app_slug: project-container
+  version: 0.1.0
+  description: Centralized project and notebook management for the FiberWise platform
+  entryPoint: dist/index.js
+  icon: fas fa-folder-open
+  category: productivity
+  publisher: FiberWise
+  rootSlug: projects # New field: Maps app to root URL path
+
+  # App slots for platform integration
+  slots:
+    - project-list
+    - notebook-list
+    - app-container
+
+  # Widgets available for dashboards
+  widgets:
+    - project-list
+    - notebook-list
+
+  # Required permissions
+  permissions:
+    - read:projects
+    - write:projects
+    - read:notebooks
+    - write:notebooks
+
+  # Data Models Definition
+  models:
+    - name: Project
+      model_slug: projects
+      description: Top-level container for organizing work
+      fields:
+        - name: Project ID
+          field_column: project_id
+          type: uuid
+          required: true
+          is_primary_key: true
+          is_unique: true
+          is_system_field: true
+          description: Unique identifier for the Project
+
+        - name: Name
+          field_column: name
+          type: string
+          required: true
+          description: Project name
+
+        - name: Description
+          field_column: description
+          type: text
+          required: false
+          description: Project description
+
+
+  # UI Components and Routes
+  components:
+    - name: app-page
+      type: page
+      route: /projects
+
+    - name: new-detail-page
+      type: page
+      route: /projects/new
+
+
+  # Routes configuration for application integration
+  routes:
+    - path: /projects
+      component: project-page
+      title: Projects
+      icon: fas fa-folder-open
+      category: Projects
+      categoryList:
+        component: '<project-list-nav></project-list-nav>'
+        slug: 'projects'
+      pageAction: true
+      pageActionComponent: create-project-action
+      pageActionAttributes:
+        title: Create New Project
+
+    - path: /projects/new
+      component: new-project-page
+      title: New Project
+      icon: fas fa-plus
+      category: Projects
+      isOverlay: true
+      menuAction: true
+
+    - path: /projects/:projectId
+      component: project-dashboard
+      title: Project Dashboard
+      icon: fas fa-folder
+      category: Projects
+      dynamic: true
+      setup:
+        type: attribute
+        param: projectId
+      pageAction: true
+      pageActionComponent: create-notebook-action
+      pageActionContext:
+        requiredParams:
+          projectId: null
+
+    - path: /projects/:projectId/notebooks
+      component: notebook-list-page
+      title: Notebooks
+      icon: fas fa-book
+      category: Projects
+      dynamic: true
+
+    - path: /projects/:projectId/notebooks/new
+      component: new-notebook-page
+      title: Create New Notebook
+      icon: fas fa-plus
+      category: Projects
+      dynamic: true
+      isOverlay: true
+
+    - path: /projects/:projectId/notebooks/:notebookId
+      component: notebook-page
+      title: Notebook
+      icon: fas fa-book-open
+      category: Projects
+      dynamic: true
+      setup:
+        type: attribute
+        params:
+          - projectId
+          - notebookId
+
+    - path: /projects/:projectId/agents/new
+      component: new-agent-page
+      title: Add Agent
+      icon: fas fa-robot
+      category: Projects
+      dynamic: true
+      isOverlay: true
+
+    - path: /projects/:projectId/settings
+      component: project-settings
+      title: Project Settings
+      icon: fas fa-cog
+      category: Projects
+      dynamic: true

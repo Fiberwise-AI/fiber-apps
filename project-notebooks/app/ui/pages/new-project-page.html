@@ -1,0 +1,332 @@
+<div class="new-project-container">
+    <nav class="breadcrumbs">
+      <a href="/projects" data-path="/projects">Projects</a> / 
+      <span>New Project</span>
+    </nav>
+    
+    <div class="content-header">
+      <h1>Create New Project</h1>
+      <p class="subtitle">Start organizing your work in a new project that are really awesome!</p>
+    </div>
+
+    <form id="newProjectForm" class="project-form">
+      <div class="form-group">
+        <label for="projectName">Project Name *</label>
+        <input 
+          type="text" 
+          id="projectName" 
+          name="name" 
+          required
+          minlength="3"
+          maxlength="100"
+          placeholder="Enter project name"
+          aria-describedby="nameHelp"
+        >
+        <small id="nameHelp" class="form-help">Project names must be 3-100 characters</small>
+        <div class="error-message" id="nameError"></div>
+      </div>
+      
+      <div class="form-group">
+        <label for="projectDescription">Description</label>
+        <textarea 
+          id="projectDescription" 
+          name="description"
+          maxlength="500"
+          placeholder="Optional project description"
+          aria-describedby="descHelp"
+        ></textarea>
+        <small id="descHelp" class="form-help">Max 500 characters</small>
+      </div>
+
+      <div class="form-group">
+        <label for="projectTemplate">Project Template:</label>
+        <!-- Do not inlude in the model, this is just a frontend only use to pre fill in agents and not needed in the future. -->
+        <select id="projectTemplate" name="projectTemplate">
+          <option value="general">General</option>
+          <option value="research">Research</option>
+          <option value="idea">Idea Generation</option>
+        </select>
+      </div>
+
+
+      
+      <!-- New Project Agents section -->
+      <div class="form-section">
+        <h3>Project Agents</h3>
+        <p class="section-help">Add AI agents to help with your project (optional)</p>
+        
+        <div class="agents-container" id="agentsContainer">
+          <!-- Agent entries will be added here dynamically -->
+          <!-- Empty state message will be shown here when no agents selected -->
+        </div>
+        
+        <div class="agent-selector">
+          <select id="agentTypeSelector" class="agent-type-select">
+            <option value="">Select an agent to add...</option>
+            <!-- Agent types will be loaded dynamically -->
+          </select>
+          <button type="button" id="addAgentBtn" class="btn-secondary">
+            <i class="fas fa-plus"></i> Add Agent
+          </button>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn-primary" id="createBtn">
+          <span class="btn-text">Create Project</span>
+          <span class="spinner hidden" id="submitSpinner"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <style>
+    .new-project-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .breadcrumbs {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .breadcrumbs a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .content-header {
+      margin-bottom: 2rem;
+    }
+
+    .content-header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2rem;
+      color: #1e293b;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #64748b;
+      font-size: 1rem;
+    }
+
+    .project-form {
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      transition: border-color 0.15s ease-in-out;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-help {
+      display: block;
+      margin-top: 0.25rem;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+
+    .error-message {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .form-actions button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn-primary {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background-color: #2563eb;
+    }
+
+    .btn-primary:disabled {
+      background-color: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background-color: #f8fafc;
+    }
+
+    .spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* New styles for agents section */
+    .form-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .form-section h3 {
+      font-size: 1.25rem;
+      margin: 0 0 0.5rem 0;
+      color: #1e293b;
+    }
+    
+    .section-help {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin: 0 0 1rem 0;
+    }
+    
+    .agents-container {
+      margin-bottom: 1rem;
+    }
+    
+    .agent-entry {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    
+    .agent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .agent-title {
+      font-weight: 500;
+      color: #1e293b;
+    }
+    
+    .agent-remove {
+      background: none;
+      border: none;
+      color: #dc2626;
+      cursor: pointer;
+      font-size: 0.875rem;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .agent-config {
+      margin-top: 0.75rem;
+    }
+    
+    .agent-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .agent-type-select {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.375rem;
+      font-size: 0.9rem;
+    }
+    
+    .agent-config-field {
+      margin-bottom: 0.75rem;
+    }
+    
+    .agent-config-field label {
+      display: block;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+      color: #334155;
+    }
+    
+    .agent-config-field input,
+    .agent-config-field textarea,
+    .agent-config-field select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+  </style>

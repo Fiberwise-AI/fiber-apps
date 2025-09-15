@@ -1,0 +1,80 @@
+app:
+  app_slug: activation-test
+  name: Activation Test App
+  description: Simple app to test agent, function, and pipeline activation
+  version: 1.0.5
+  publisher: FiberWise
+  category: testing
+  icon: fas fa-test-tube
+  entryPoint: index.js
+  routes:
+  - path: /
+    title: Test Home
+    component: test-home
+    icon: fas fa-home
+agents:
+- name: test-agent
+  agent_type_id: custom
+  description: Simple test agent
+  implementation_path: agents/test_agent.py
+  language: python
+  version: 0.1.0
+  permissions:
+  - llm.completion
+  allowed_context_variables:
+  - user_id
+  - app_id
+- name: test-agent-2
+  agent_type_id: custom
+  description: Second test agent
+  implementation_path: agents/test_agent_2.py
+  language: python
+  version: 0.1.0
+  permissions:
+  - llm.completion
+  allowed_context_variables:
+  - user_id
+  - app_id
+functions:
+- name: test_function
+  description: Simple test function
+  implementation_path: functions/test_function.py
+  version: 0.1.0
+  is_async: false
+  input_schema:
+    type: object
+    properties:
+      message:
+        type: string
+        description: Test message to process
+    required:
+    - message
+  output_schema:
+    type: object
+    properties:
+      result:
+        type: string
+      status:
+        type: string
+pipelines:
+- name: test_pipeline
+  description: Simple test pipeline
+  version: 0.1.0
+  implementation_path: test_pipeline.py
+  input_schema:
+    type: object
+    properties:
+      message:
+        type: string
+        description: Test message to process
+    required:
+    - message
+  output_schema:
+    type: object
+    properties:
+      success:
+        type: boolean
+      final_result:
+        type: string
+      pipeline_name:
+        type: string

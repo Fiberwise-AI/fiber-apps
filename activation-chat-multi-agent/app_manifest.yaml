@@ -1,0 +1,57 @@
+agents:
+- agent_type_id: custom
+  agent_slug: chat-agent
+  description: Intelligent conversational AI agent with context awareness and helpful
+    response generation
+  implementation_path: agents/chat_agent.py
+  language: python
+  name: Chat Agent
+  version: 0.0.25
+- agent_type_id: custom
+  agent_slug: chat-summarizer-agent
+  description: Summarizes conversations by analyzing chat history from agent activations
+  implementation_path: agents/chat_summarizer_agent.py
+  language: python
+  name: Chat Summarizer Agent
+  version: 0.0.25
+app:
+  app_slug: activation-chat-multi-agent
+  category: simple
+  description: A chat application that uses agent activations and dynamic data as
+    the message store
+  entryPoint: index.js
+  icon: fas fa-comments
+  models:
+  - description: Simple chat session container
+    fields:
+    - description: Primary key used as chat_id in agent activation context
+      field_column: chat_id
+      is_primary_key: true
+      name: Chat ID
+      required: true
+      type: uuid
+    - default: New Chat
+      field_column: title
+      name: Title
+      required: true
+      type: string
+    - description: ID of the user who owns this chat
+      field_column: user_id
+      is_system_field: true
+      name: User ID
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    model_slug: chats
+    name: Chat
+  name: Activation Chat Multi Agent
+  publisher: FiberWise
+  routes:
+  - component: chat-app-multi
+    icon: fas fa-comments
+    path: /
+    title: Chat
+  version: 0.0.25

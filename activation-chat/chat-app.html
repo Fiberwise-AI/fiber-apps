@@ -1,0 +1,24 @@
+<div class="chat-app-container">
+  <header class="chat-header">
+    <h1>Activation Chat</h1>
+    <div class="header-actions">
+      <button id="settings-btn" class="button icon-button" title="Chat Settings">
+        <i class="fas fa-cog"></i>
+      </button>
+      <button id="new-chat-btn" class="button">New Chat</button>
+    </div>
+  </header>
+  
+  <div class="chat-layout">
+    <aside class="sidebar">
+      <chat-list></chat-list>
+    </aside>
+    
+    <main class="main-content">
+      <div class="messages-wrapper">
+        <chat-messages class="chat-messages"></chat-messages>
+      </div>
+      <chat-input class="chat-input"></chat-input>
+    </main>
+  </div>
+</div>

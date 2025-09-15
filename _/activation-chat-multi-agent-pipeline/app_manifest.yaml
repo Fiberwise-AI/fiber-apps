@@ -1,0 +1,200 @@
+agents:
+- agent_type_id: custom
+  description: Intelligent conversational AI agent with context awareness and helpful
+    response generation
+  implementation_path: agents/chat_agent.py
+  language: python
+  name: ChatAgent
+  version: 0.0.1
+- agent_type_id: custom
+  description: Summarizes conversations by analyzing chat history from agent activations
+  implementation_path: agents/chat_summarizer_agent.py
+  language: python
+  name: ChatSummarizerAgent
+  version: 0.0.1
+app:
+  app_slug: activation-chat-multi-agent-2
+  category: simple
+  description: A chat application that uses agent activations and dynamic data as
+    the message store
+  entryPoint: index.js
+  icon: fas fa-comments
+  models:
+  - description: Simple chat session container
+    fields:
+    - description: Primary key used as chat_id in agent activation context
+      field_column: chat_id
+      is_primary_key: true
+      name: Chat ID
+      required: true
+      type: uuid
+    - default: New Chat
+      field_column: title
+      name: Title
+      required: true
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    model_slug: chats
+    name: Chat
+  name: Activation Chat Multi Agent
+  publisher: FiberWise
+  routes:
+  - component: chat-app-multi
+    icon: fas fa-comments
+    path: /
+    title: Chat
+  version: 0.0.88
+oauth:
+  authenticators:
+  - file: .fiber/local/oauth/fiberwise_developer.json
+    name: fiberwise-developer
+    type: oauth2
+pipelines:
+- name: "Conditional Chat Summarization"
+  description: "Event-triggered pipeline that analyzes chat messages and provides intelligent summaries when conversation reaches meaningful length"
+  is_active: true
+  version: "1.1.0"
+  # Event-based trigger for agent activations
+  trigger_config:
+    type: "event"
+    config:
+      event_name: "agent.activated"
+      # Filter to prevent recursive triggering from summarizer agent
+      filter: "context.agent_name == 'ChatAgent'"
+      # Enhanced trigger configuration
+      conditions:
+        - field: "context.chat_id"
+          operator: "exists"
+        - field: "input_data.prompt" 
+          operator: "not_empty"
+      retry_policy:
+        max_retries: 3
+        backoff_multiplier: 2
+        timeout_seconds: 120
+  # Pipeline execution configuration
+  execution_config:
+    timeout_seconds: 300
+    max_concurrent_instances: 10
+    error_handling: "continue_on_node_failure"
+    logging_level: "info"
+  # Visual pipeline definition for UI editor
+  definition:
+    nodes:
+      - id: "node_1_check_count"
+        type: "function"
+        position: { x: 100, y: 150 }
+        data:
+          label: "Count Chat Messages"
+          functionId: "count_chat_messages"
+          description: "Analyzes chat history to count meaningful conversation messages"
+          params:
+            include_system_messages: false
+            exclude_agent_types: ["ChatSummarizerAgent"]
+          # Node-level configuration
+          retry_policy:
+            enabled: true
+            max_retries: 2
+            backoff_seconds: 1
+          timeout_seconds: 30
+          error_handling: "fail_pipeline"
+      - id: "node_2_analyze_context"
+        type: "function"
+        position: { x: 250, y: 150 }
+        data:
+          label: "Analyze Chat Context"
+          functionId: "analyze_chat_context"
+          description: "Extracts conversation context and determines if summarization is needed"
+          params:
+            min_message_threshold: 3
+            context_window: 20
+            analyze_topics: true
+          retry_policy:
+            enabled: true
+            max_retries: 2
+            backoff_seconds: 1
+          timeout_seconds: 45
+          error_handling: "continue_with_defaults"
+      - id: "node_3_conditional_summarize"
+        type: "agent"
+        position: { x: 400, y: 150 }
+        data:
+          label: "Intelligent Chat Summarizer"
+          agentId: "ChatSummarizerAgent"
+          description: "Generates comprehensive conversation summaries with insights and analysis"
+          config:
+            summary_type: "comprehensive"
+            include_insights: true
+            include_topics: true
+            max_summary_length: 500
+            temperature: 0.3
+          retry_policy:
+            enabled: true
+            max_retries: 1
+            backoff_seconds: 2
+          timeout_seconds: 120
+          error_handling: "return_error_result"
+    edges:
+      - id: "edge_1_to_2"
+        source: "node_1_check_count"
+        target: "node_2_analyze_context"
+        sourceHandle: "output"
+        targetHandle: "input"
+        data:
+          condition: "output.message_count > 0"
+          transform:
+            type: "pass_through"
+      - id: "edge_2_to_3"
+        source: "node_2_analyze_context"
+        target: "node_3_conditional_summarize"
+        sourceHandle: "output"
+        targetHandle: "input"
+        data:
+          condition: "output.should_summarize === true"
+          transform:
+            type: "merge_context"
+            merge_fields: ["message_count", "context_analysis", "chat_metadata"]
+
+# Additional pipeline for manual testing
+- name: "Manual Chat Analysis"
+  description: "Manual trigger pipeline for on-demand chat analysis and summarization"
+  is_active: true
+  version: "1.0.0"
+  trigger_config:
+    type: "manual"
+    config:
+      allowed_roles: ["user", "admin"]
+      input_schema:
+        type: "object"
+        required: ["chat_id"]
+        properties:
+          chat_id:
+            type: "string"
+            description: "Chat session ID to analyze"
+          analysis_type:
+            type: "string"
+            enum: ["summary", "insights", "topics", "full"]
+            default: "full"
+            description: "Type of analysis to perform"
+  execution_config:
+    timeout_seconds: 180
+    max_concurrent_instances: 5
+    logging_level: "debug"
+  definition:
+    nodes:
+      - id: "manual_analyze"
+        type: "agent"
+        position: { x: 200, y: 100 }
+        data:
+          label: "Manual Chat Analysis"
+          agentId: "ChatSummarizerAgent"
+          description: "Perform comprehensive chat analysis on demand"
+          config:
+            summary_type: "comprehensive"
+            include_insights: true
+            include_topics: true
+            include_statistics: true
+    edges: []

@@ -1,0 +1,229 @@
+.notebook-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Breadcrumbs styling */
+.breadcrumbs {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #64748b);
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb-link {
+  color: var(--color-primary, #3b82f6);
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.current-page {
+  font-weight: 500;
+}
+
+/* Header styling */
+.notebook-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left {
+  flex: 1;
+  min-width: 250px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#notebook-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: var(--color-text-primary, #1e293b);
+  outline: none;
+  line-height: 1.2;
+}
+
+#notebook-title:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+#notebook-title:focus {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid var(--color-primary, #3b82f6);
+}
+
+.notebook-type-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--color-badge-bg, #e2e8f0);
+  color: var(--color-badge-text, #475569);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark, #2563eb);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--color-text-primary, #1e293b);
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-hover, #f8fafc);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Save status indicator */
+.save-status {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: opacity 0.5s;
+}
+
+.save-status.unsaved {
+  color: var(--color-warning, #f59e0b);
+}
+
+.save-status.saving {
+  color: var(--color-info, #3b82f6);
+}
+
+.save-status.saved {
+  color: var(--color-success, #10b981);
+  opacity: 1;
+}
+
+.save-status.error {
+  color: var(--color-error, #ef4444);
+}
+
+/* Editor container */
+.editor-container {
+  flex: 1;
+  min-height: 300px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: white;
+}
+
+.notebook-editor {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  border: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text-primary, #1e293b);
+  outline: none;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 0.875rem;
+}
+
+.spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--color-primary, #3b82f6);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 0.75rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.error {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-error-light, #fee2e2);
+  color: var(--color-error, #b91c1c);
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.error button {
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+}
+
+/* Footer styling */
+.notebook-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-tertiary, #94a3b8);
+  font-size: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .notebook-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+  }
+  
+  #notebook-title {
+    font-size: 1.5rem;
+  }
+}

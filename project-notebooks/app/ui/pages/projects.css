@@ -1,0 +1,12 @@
+.project-plugin-extension {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.sidebar-extensions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

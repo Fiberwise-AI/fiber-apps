@@ -1,0 +1,185 @@
+<style>
+  :host {
+    display: block;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .overlay-container {
+    padding: 20px;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  
+  .overlay-title {
+    margin: 0 0 24px 0;
+    font-size: 1.5rem;
+    color: #1e293b;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #334155;
+  }
+  
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .agent-type-info {
+    margin-top: 16px;
+    padding: 16px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+    display: none;
+  }
+  
+  .switch-container {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
+  .switch-label {
+    margin-right: 12px;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #3b82f6;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  
+  .btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .btn-secondary {
+    background-color: #64748b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+    text-align: center;
+  }
+  
+  .error-state i {
+    font-size: 2.5rem;
+    color: #ef4444;
+    margin-bottom: 16px;
+  }
+  
+  .error-state button {
+    margin-top: 16px;
+  }
+</style>
+
+<div class="overlay-container">
+  <h2 class="overlay-title">Add New Agent</h2>
+  
+  <form id="new-agent-form">
+    <div class="form-group">
+      <label for="agent-type-selector">Select Agent Type</label>
+      <select id="agent-type-selector" required>
+        <option value="" disabled selected>Choose an agent type...</option>
+      </select>
+    </div>
+    
+    <div id="agent-type-info" class="agent-type-info">
+      <!-- Agent type details will be populated here -->
+    </div>
+    
+    <div class="form-group">
+      <label for="agent-name">Agent Name</label>
+      <input type="text" id="agent-name" placeholder="Enter a name for this agent" required>
+    </div>
+    
+    <div class="switch-container">
+      <label class="switch-label">Enable agent immediately</label>
+      <label class="switch">
+        <input type="checkbox" id="agent-enabled" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <div class="form-actions">
+      <button type="button" id="cancel-btn" class="btn-secondary">Cancel</button>
+      <button type="submit" id="create-btn" class="btn-primary">Create Agent</button>
+    </div>
+  </form>
+</div>

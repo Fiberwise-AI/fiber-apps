@@ -1,0 +1,156 @@
+name: knowledge-builder-pro-v2
+version: 2.0.0
+description: "Advanced knowledge building app with modular pipeline architecture using Wikipedia API, web scraping, and conversational analysis"
+
+# Data models for research state management
+data_models:
+  research_project:
+    project_id: string
+    topic: string
+    scope: string
+    status: string
+    created_at: datetime
+    updated_at: datetime
+    
+  research_execution:
+    execution_id: string
+    project_id: string
+    input_data: json
+    output_data: json
+    status: string
+    start_time: datetime
+    end_time: datetime
+    execution_log: json
+    
+  agent_conversation:
+    conversation_id: string
+    execution_id: string
+    agent_name: string
+    input_data: json
+    output_data: json
+    insights: json
+    timestamp: datetime
+
+# App functions 
+functions:
+  - name: wikipediaApiScraper
+    implementation_path: functions/wikipedia_api_scraper.py
+    description: "Comprehensive Wikipedia API research with related articles and references"
+    
+  - name: synthesizeKnowledge  
+    implementation_path: functions/synthesize_knowledge.py
+    description: "Synthesize research data into comprehensive knowledge base"
+
+# App agents
+agents:
+  - name: PlaywrightScraperAgent
+    implementation_path: agents/playwright_scraper_agent.py
+    description: "Web scraping agent using Playwright with multiple modes"
+    
+  - name: data_processor_agent
+    implementation_path: agents/data_processor_agent.py
+    description: "Data processing agent for extraction, transformation, analysis, and validation"
+    
+  - name: research_coordinator_agent
+    implementation_path: agents/research_coordinator_agent.py
+    description: "Research coordination and orchestration agent"
+    
+  - name: domain_expert_agent
+    implementation_path: agents/domain_expert_agent.py
+    description: "Domain expertise and subject matter analysis agent"
+    
+  - name: hypothesis_agent
+    implementation_path: agents/hypothesis_agent.py
+    description: "Hypothesis generation and testing agent"
+
+# Pipeline definitions using modular step architecture
+pipelines:
+  - name: knowledge-builder-v2
+    description: "Knowledge building pipeline with modular step architecture"
+    implementation_path: pipeline/main.py
+    class_name: KnowledgeBuilderPipelineV2
+    version: "2.0.0"
+    architecture: "modular_steps"
+    steps:
+      - name: wikipedia_research
+        type: data_collection
+        implementation: pipeline/steps/wikipedia_research_step.py
+        schema_input: WikipediaResearchInputSchema
+        schema_output: WikipediaResearchOutputSchema
+        
+      - name: web_scraping
+        type: data_collection
+        implementation: pipeline/steps/web_scraping_step.py
+        schema_input: WebScrapingInputSchema
+        schema_output: WebScrapingOutputSchema
+        
+      - name: data_extraction
+        type: data_processing
+        implementation: pipeline/steps/data_extraction_step.py
+        schema_input: DataProcessingInputSchema
+        schema_output: DataProcessingOutputSchema
+        
+      - name: data_transformation
+        type: data_processing
+        implementation: pipeline/steps/data_transformation_step.py
+        schema_input: DataProcessingInputSchema
+        schema_output: DataProcessingOutputSchema
+        
+      - name: data_analysis
+        type: data_processing
+        implementation: pipeline/steps/data_analysis_step.py
+        schema_input: DataProcessingInputSchema
+        schema_output: DataProcessingOutputSchema
+        
+      - name: data_validation
+        type: data_processing
+        implementation: pipeline/steps/data_validation_step.py
+        schema_input: DataProcessingInputSchema
+        schema_output: DataProcessingOutputSchema
+        
+      - name: research_coordination
+        type: agent_collaboration
+        implementation: pipeline/steps/research_coordination_step.py
+        schema_input: AgentConversationInputSchema
+        schema_output: AgentConversationOutputSchema
+        
+      - name: domain_expert
+        type: agent_collaboration
+        implementation: pipeline/steps/domain_expert_step.py
+        schema_input: AgentConversationInputSchema
+        schema_output: AgentConversationOutputSchema
+        
+      - name: hypothesis_testing
+        type: agent_collaboration
+        implementation: pipeline/steps/hypothesis_testing_step.py
+        schema_input: AgentConversationInputSchema
+        schema_output: AgentConversationOutputSchema
+        
+      - name: knowledge_synthesis
+        type: output_generation
+        implementation: pipeline/steps/knowledge_synthesis_step.py
+        schema_input: KnowledgeSynthesisInputSchema
+        schema_output: KnowledgeSynthesisOutputSchema
+
+# UI routes
+routes:
+  - path: "/"
+    component: "knowledge-builder-pro"
+    description: "Main research interface with pipeline execution and monitoring"
+
+# Dependencies and shared libraries
+dependencies:
+  shared_libraries:
+    - fiberwise-common/pipeline_steps  # Core schemas and base classes
+  external:
+    - playwright
+    - axios
+    - pydantic
+
+# App metadata
+metadata:
+  architecture: "modular_steps"
+  pipeline_version: "2.0.0"
+  schema_validation: true
+  step_separation: true
+  shared_schemas: true

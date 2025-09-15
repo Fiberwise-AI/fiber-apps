@@ -1,0 +1,360 @@
+agents:
+- agent_type_id: custom
+  allowed_context_variables:
+  - user_id
+  - app_id
+  - provider_id
+  - template_name
+  description: Agent for working with emails across different providers using OAuth
+  implementation_path: agents/email_agent.py
+  language: python
+  name: email-agent
+  permissions:
+  - credentials.oauth
+  - data.read
+  - data.write
+  - llm.completion
+  version: 0.0.1
+app:
+  app_slug: email-agent-app-2
+  category: productivity
+  description: Multi-provider email client with AI-powered analysis
+  entryPoint: index.js
+  icon: fas fa-envelope
+  models:
+  - description: User-specific prompt templates for email analysis and actions
+    fields:
+    - description: Primary key for the prompt template
+      field_column: template_id
+      is_primary_key: true
+      name: Template ID
+      required: true
+      type: uuid
+    - description: User who owns this template
+      field_column: user_id
+      name: User ID
+      required: true
+      type: string
+    - description: App ID this template belongs to
+      field_column: app_id
+      name: App ID
+      required: true
+      type: string
+    - description: Unique name for the template
+      field_column: template_name
+      name: Template Name
+      required: true
+      type: string
+    - description: The actual prompt template with placeholders
+      field_column: template_content
+      name: Template Content
+      required: true
+      type: text
+    - description: Optional description of what the template is for
+      field_column: description
+      name: Description
+      required: false
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    - default: CURRENT_TIMESTAMP
+      field_column: updated_at
+      is_system_field: true
+      name: Updated At
+      type: timestamp
+    model_slug: email_prompt_templates
+    name: Email Prompt Template
+  - description: Saved email analysis results
+    fields:
+    - description: Primary key for the analysis
+      field_column: analysis_id
+      is_primary_key: true
+      name: Analysis ID
+      required: true
+      type: uuid
+    - description: User who owns this analysis
+      field_column: user_id
+      name: User ID
+      required: true
+      type: string
+    - description: Provider ID used for the email
+      field_column: provider_id
+      name: Provider ID
+      required: true
+      type: string
+    - description: Email message ID that was analyzed
+      field_column: message_id
+      name: Message ID
+      required: true
+      type: string
+    - description: Email subject
+      field_column: subject
+      name: Subject
+      required: false
+      type: string
+    - description: Email sender
+      field_column: sender
+      name: Sender
+      required: false
+      type: string
+    - default: CURRENT_TIMESTAMP
+      description: When the analysis was performed
+      field_column: analysis_date
+      name: Analysis Date
+      type: timestamp
+    - description: Email summary from analysis
+      field_column: summary
+      name: Summary
+      required: false
+      type: text
+    - description: Detected sentiment (positive, negative, neutral)
+      field_column: sentiment
+      name: Sentiment
+      required: false
+      type: string
+    - description: Detected priority (high, medium, low)
+      field_column: priority
+      name: Priority
+      required: false
+      type: string
+    - description: Main topics identified in JSON array format
+      field_column: topics
+      name: Topics
+      required: false
+      type: json
+    - description: Action items identified in JSON array format
+      field_column: action_items
+      name: Action Items
+      required: false
+      type: json
+    - description: Suggested labels in JSON array format
+      field_column: suggested_labels
+      name: Suggested Labels
+      required: false
+      type: json
+    - description: Template name used for the analysis
+      field_column: template_used
+      name: Template Used
+      required: false
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    model_slug: email_analyses
+    name: Email Analysis
+  - description: Cached email messages for faster inbox loading
+    fields:
+    - description: Primary key for the cached message
+      field_column: cache_id
+      is_primary_key: true
+      name: Cache ID
+      required: true
+      type: uuid
+    - description: Provider connection ID
+      field_column: connection_id
+      name: Connection ID
+      required: true
+      type: string
+    - description: Original email message ID from provider
+      field_column: message_id
+      name: Message ID
+      required: true
+      type: string
+    - description: Email subject line
+      field_column: subject
+      name: Subject
+      required: false
+      type: string
+    - description: Email sender address
+      field_column: sender
+      name: Sender
+      required: false
+      type: string
+    - description: Email sender display name
+      field_column: sender_name
+      name: Sender Name
+      required: false
+      type: string
+    - description: Email recipients (JSON array)
+      field_column: recipients
+      name: Recipients
+      required: false
+      type: json
+    - description: Email body content (truncated for performance)
+      field_column: body_preview
+      name: Body Preview
+      required: false
+      type: text
+    - description: Full email body content
+      field_column: body_full
+      name: Body Full
+      required: false
+      type: text
+    - description: Message thread ID for threading
+      field_column: thread_id
+      name: Thread ID
+      required: false
+      type: string
+    - description: Email labels/folders (JSON array)
+      field_column: labels
+      name: Labels
+      required: false
+      type: json
+    - description: Whether message is read/unread
+      field_column: is_read
+      name: Is Read
+      required: false
+      type: boolean
+    - description: Whether message has attachments
+      field_column: has_attachments
+      name: Has Attachments
+      required: false
+      type: boolean
+    - description: Email importance/priority level
+      field_column: importance
+      name: Importance
+      required: false
+      type: string
+    - description: Original message timestamp from provider
+      field_column: message_date
+      name: Message Date
+      required: false
+      type: timestamp
+    - description: Last sync timestamp for incremental loading
+      field_column: last_sync_id
+      name: Last Sync ID
+      required: false
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: cached_at
+      is_system_field: true
+      name: Cached At
+      type: timestamp
+    - default: CURRENT_TIMESTAMP
+      field_column: updated_at
+      is_system_field: true
+      name: Updated At
+      type: timestamp
+    model_slug: cached_messages
+    name: Cached Email Messages
+  name: Email Agent App
+  publisher: FiberWise
+  routes:
+  - component: email-agent-app
+    icon: fas fa-envelope
+    path: /
+    title: Email Client
+  - component: email-settings
+    icon: fas fa-cog
+    path: /settings
+    title: Settings
+  - component: email-connections
+    icon: fas fa-plug
+    path: /settings/email-connections
+    title: Email Connections
+  - component: prompt-templates
+    icon: fas fa-book
+    path: /templates
+    title: Prompt Templates
+  - component: email-analytics
+    icon: fas fa-chart-bar
+    path: /analytics
+    title: Analytics
+  - component: email-detail-page
+    icon: fas fa-envelope-open
+    path: /email/:connectionId/:messageId
+    title: Email Details
+  version: 1.0.145
+functions:
+- description: Fetches the most recent emails from a specified provider
+  implementation_path: functions/get_recent_emails.py
+  input_schema:
+    properties:
+      authenticator_id:
+        description: The ID of the email authenticator to fetch from
+        type: string
+      label:
+        default: INBOX
+        description: Email label/folder to fetch from (e.g., INBOX, SENT)
+        type: string
+      limit:
+        default: 10
+        description: Number of emails to fetch (10, 50, or 100)
+        enum:
+        - 10
+        - 50
+        - 100
+        type: integer
+    required:
+    - authenticator_id
+    type: object
+  is_async: false
+  name: get_recent_emails
+  output_schema:
+    properties:
+      messages:
+        items:
+          type: object
+        type: array
+      status:
+        enum:
+        - success
+        - error
+        type: string
+      total_count:
+        type: integer
+    type: object
+  version: 0.1.0
+- description: Fetches detailed email content by message ID
+  implementation_path: functions/get_email.py
+  input_schema:
+    properties:
+      authenticator_id:
+        description: The ID of the email authenticator connection
+        type: string
+      message_id:
+        description: The ID of the message to fetch
+        type: string
+    required:
+    - authenticator_id
+    - message_id
+    type: object
+  is_async: false
+  name: get_email
+  output_schema:
+    properties:
+      email:
+        description: Email details object with full content
+        type: object
+      message:
+        description: Error message if status is error
+        type: string
+      status:
+        enum:
+        - success
+        - error
+        type: string
+    type: object
+  version: 0.1.0
+oauth:
+  authenticators:
+  - additional_params:
+      access_type: offline
+      prompt: consent
+    file: .fiber/local/oauth/fiberwise_developer.json
+    name: Gmail
+    scopes:
+    - openid
+    - profile
+    - email
+    - https://www.googleapis.com/auth/gmail.readonly
+    - https://www.googleapis.com/auth/gmail.send
+    type: oauth2
+  - file: .fiber/fiber dev/oauth/fiberwise_developer.json
+    name: fiberwise-developer
+    type: oauth2

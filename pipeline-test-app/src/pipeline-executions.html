@@ -1,0 +1,96 @@
+<div class="pipeline-executions">
+  <!-- Navigation Bar -->
+  <nav class="app-nav">
+    <div class="nav-brand">
+      <i class="fas fa-calculator"></i>
+      Pipeline Test App
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" data-route="/">
+        <i class="fas fa-calculator"></i>
+        Test Pipeline
+      </button>
+      <button class="nav-link active" data-route="/executions">
+        <i class="fas fa-history"></i>
+        View Executions
+      </button>
+    </div>
+  </nav>
+
+  <div class="app-header">
+    <h1>
+      <i class="fas fa-history"></i>
+      Pipeline Executions
+    </h1>
+    <p>View and monitor all pipeline execution history</p>
+  </div>
+
+  <div class="main-content">
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">
+          <i class="fas fa-list"></i>
+          All
+        </button>
+        <button class="filter-btn" data-filter="success">
+          <i class="fas fa-check-circle"></i>
+          Success
+        </button>
+        <button class="filter-btn" data-filter="error">
+          <i class="fas fa-times-circle"></i>
+          Failed
+        </button>
+        <button class="filter-btn" data-filter="running">
+          <i class="fas fa-spinner"></i>
+          Running
+        </button>
+      </div>
+      
+      <div class="controls-right">
+        <div class="sort-group">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select">
+            <option value="created_at_desc">Newest First</option>
+            <option value="created_at_asc">Oldest First</option>
+            <option value="status_asc">Status (A-Z)</option>
+            <option value="status_desc">Status (Z-A)</option>
+          </select>
+        </div>
+        
+        <button id="refresh-btn" class="refresh-btn">
+          <i class="fas fa-sync-alt"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Executions List -->
+    <div class="executions-container">
+      <div id="executions-list" class="executions-list">
+        <div class="loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          Loading executions...
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button id="prev-page" class="pagination-btn">
+        <i class="fas fa-chevron-left"></i>
+        Previous
+      </button>
+      
+      <span id="page-info" class="page-info">Page 1 of 1</span>
+      
+      <button id="next-page" class="pagination-btn">
+        Next
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Messages -->
+  <div id="message-container" class="message-container"></div>
+</div>

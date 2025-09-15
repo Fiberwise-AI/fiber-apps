@@ -1,0 +1,143 @@
+app:
+  name: Wiki Test App
+  app_slug: wiki-test-app
+  version: 0.0.3
+  description: Wiki-style app demonstrating mixed isolation - public pages with user-tracked
+    edit history
+  entryPoint: index.js
+  icon: fas fa-book
+  category: simple
+  publisher: FiberWise
+  user_isolation: disabled
+  models:
+  - name: Wiki Page
+    model_slug: wiki_pages
+    description: Public wiki pages visible to all users
+    fields:
+    - name: Page ID
+      field_column: page_id
+      type: uuid
+      required: true
+      is_primary_key: true
+      description: Unique identifier for each wiki page
+    - name: Page Title
+      field_column: page_title
+      type: string
+      required: true
+      description: Title of the wiki page
+    - name: Page Slug
+      field_column: page_slug
+      type: string
+      required: true
+      unique: true
+      description: URL-friendly version of the page title
+    - name: Content
+      field_column: content
+      type: text
+      required: true
+      description: Current content of the wiki page
+    - name: Summary
+      field_column: summary
+      type: string
+      description: Brief description of the page
+    - name: Last Editor
+      field_column: last_editor_id
+      type: string
+      description: User ID of last person to edit this page
+      is_system_field: true
+    - name: Created At
+      field_column: created_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+    - name: Updated At
+      field_column: updated_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+    - name: View Count
+      field_column: view_count
+      type: integer
+      default: 0
+      description: Number of times this page has been viewed
+  - name: Edit History
+    model_slug: edit_history
+    description: User-tracked history of all wiki page edits
+    fields:
+    - name: Edit ID
+      field_column: edit_id
+      type: uuid
+      required: true
+      is_primary_key: true
+      description: Unique identifier for each edit
+    - name: Page ID
+      field_column: page_id
+      type: uuid
+      required: true
+      description: Reference to the wiki page that was edited
+    - name: User ID
+      field_column: user_id
+      type: string
+      description: ID of user who made this edit
+      is_system_field: true
+    - name: Edit Type
+      field_column: edit_type
+      type: string
+      required: true
+      default: update
+      description: Type of edit (create, update, delete)
+    - name: Previous Content
+      field_column: previous_content
+      type: text
+      description: Content before this edit
+    - name: New Content
+      field_column: new_content
+      type: text
+      required: true
+      description: Content after this edit
+    - name: Edit Summary
+      field_column: edit_summary
+      type: string
+      description: User-provided summary of changes made
+    - name: Characters Changed
+      field_column: characters_changed
+      type: integer
+      description: Number of characters added or removed
+    - name: Created At
+      field_column: created_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+  routes:
+  - path: /
+    component: wiki-home
+    title: Wiki Home
+    icon: fas fa-home
+  - path: /create
+    component: create-page
+    title: Create Page
+    icon: fas fa-plus
+  - path: /page/:slug
+    component: wiki-page
+    title: Wiki Page
+    icon: fas fa-file-alt
+  - path: /edit/:slug
+    component: edit-page
+    title: Edit Page
+    icon: fas fa-edit
+  - path: /history/:slug
+    component: page-history
+    title: Page History
+    icon: fas fa-history
+  - path: /all-pages
+    component: all-pages
+    title: All Pages
+    icon: fas fa-list
+agents:
+- name: WikiAgent
+  agent_slug: wiki-agent
+  agent_type_id: custom
+  version: 1.0.0
+  description: Agent for managing wiki pages and tracking edit history
+  implementation_path: agents/wiki_agent.py
+  language: python

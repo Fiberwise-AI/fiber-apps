@@ -1,0 +1,225 @@
+<style>
+  :host {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --bg-surface: white;
+    --bg-panel: #f8fafc;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .new-notebook-form {
+    background: var(--bg-surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  h2 {
+    margin-top: 0;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  input, select, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .checkbox-label input {
+    width: auto;
+    margin: 0;
+  }
+  
+  .agent-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--bg-panel);
+    border-color: var(--text-secondary);
+  }
+  
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-primary:hover {
+    background: var(--primary-hover);
+  }
+  
+  .error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .helper-text {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .spinner {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  
+  .spinner.hidden {
+    display: none;
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<div class="new-notebook-form">
+  <h2>Create New Notebook</h2>
+  
+  <div id="notebook-form">
+    <div class="form-group">
+      <label for="notebook-name">Notebook Name</label>
+      <input type="text" id="notebook-name" name="name" required placeholder="Enter a name for your notebook">
+    </div>
+    
+    <div class="form-group">
+      <label for="notebook-type">Notebook Type</label>
+      <select id="notebook-type" name="notebook_type">
+        <option value="general">General Writing</option>
+        <option value="research">Research</option>
+        <option value="blog">Blog Post</option>
+        <option value="report">Report</option>
+        <option value="script">Script</option>
+        <option value="idea">Ideas</option>
+        <option value="summary">Summary</option>
+        <option value="chat">Chat-Driven</option>
+      </select>
+      <p class="helper-text">Select the type of notebook to help with organization and tailored AI assistance.</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="notebook-content">Initial Content (Optional)</label>
+      <textarea id="notebook-content" name="content" placeholder="Start writing or leave blank..."></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>AI Agents (Optional)</label>
+      <div class="agent-options">
+        <label class="checkbox-label">
+          <input type="checkbox" name="agents" value="research">
+          Research
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="agents" value="writing">
+          Writing
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="agents" value="creative">
+          Creative
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="agents" value="summary">
+          Summary
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="agents" value="factcheck">
+          Fact Check
+        </label>
+      </div>
+      <p class="helper-text">Select AI agents to assist with your writing process.</p>
+    </div>
+    
+    <div class="button-group">
+      <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+      <!-- Add explicit onclick handler as a backup -->
+      <button type="button" class="btn btn-primary" id="create-btn" onclick="this.getRootNode().host.handleSubmit()">
+        <span class="btn-text">Create Notebook</span>
+        <span id="submit-spinner" class="spinner hidden">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>

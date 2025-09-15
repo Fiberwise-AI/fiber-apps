@@ -1,0 +1,162 @@
+<div class="pipeline-test-app">
+  <!-- Navigation Bar -->
+  <nav class="app-nav">
+    <div class="nav-brand">
+      <i class="fas fa-calculator"></i>
+      Pipeline Test App
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" data-route="/">
+        <i class="fas fa-calculator"></i>
+        Test Pipeline
+      </button>
+      <button class="nav-link" data-route="/executions">
+        <i class="fas fa-history"></i>
+        View Executions
+      </button>
+    </div>
+  </nav>
+
+  <div class="app-header">
+    <h1>
+      <i class="fas fa-calculator"></i>
+      Pipeline Test App
+    </h1>
+    <p>Simple 2-step pipeline: double a number and save the result</p>
+  </div>
+
+  <div class="main-content">
+    <!-- Input Panel -->
+    <div id="input-panel" class="panel">
+      <h2>Test Pipeline</h2>
+      <form id="pipeline-form" class="form">
+        <div class="form-group">
+          <label for="pipeline-select">Select Pipeline:</label>
+          <select id="pipeline-select" required>
+            <option value="">Loading pipelines...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="number-input">Enter a Number:</label>
+          <input
+            type="number"
+            id="number-input"
+            value="42"
+            required
+            min="1"
+            max="1000"
+          >
+        </div>
+        <button type="submit" class="primary-button">
+          <i class="fas fa-play"></i>
+          Run Pipeline
+        </button>
+      </form>
+    </div>
+
+    <!-- Status Panel -->
+    <div id="status-panel" class="panel hidden">
+      <h2>Pipeline Status</h2>
+      <div class="status-steps">
+        <div class="status-item" id="step-double">
+          <div class="step-icon">
+            <i class="fas fa-times-2"></i>
+          </div>
+          <div class="step-content">
+            <h3>Step 1: Double Number</h3>
+            <p>Processing input number...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+
+        <!-- Connection arrow between steps -->
+        <div class="step-connection" id="connection-1-2">
+          <div class="connection-line">
+            <i class="fas fa-arrow-down"></i>
+          </div>
+        </div>
+
+        <div class="status-item" id="step-save">
+          <div class="step-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="step-content">
+            <h3>Step 2: Save Result</h3>
+            <p>Saving to database...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+
+    <!-- Results Panel -->
+    <div id="results-panel" class="panel hidden">
+      <h2>Pipeline Results</h2>
+
+      <!-- Show completed pipeline steps -->
+      <div class="status-steps">
+        <div class="status-item completed" id="result-step-double">
+          <div class="step-icon">
+            <i class="fas fa-times-2"></i>
+          </div>
+          <div class="step-content">
+            <h3>Step 1: Double Number</h3>
+            <p>Processing input number...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-check completed"></i>
+          </div>
+        </div>
+
+        <div class="status-item completed" id="result-step-save">
+          <div class="step-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="step-content">
+            <h3>Step 2: Save Result</h3>
+            <p>Saving to database...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-check completed"></i>
+          </div>
+        </div>
+      </div>
+ 
+      <button id="try-again-btn" class="primary-button">
+        <i class="fas fa-refresh"></i>
+        Test Again
+      </button>
+      <div class="result-display">
+        <div class="result-item">
+          <strong>Input:</strong>
+          <span id="result-input">-</span>
+        </div>
+        <div class="result-item">
+          <strong>Doubled:</strong>
+          <span id="result-doubled">-</span>
+        </div>
+        <div class="result-item">
+          <strong>Status:</strong>
+          <span id="result-status" class="status-badge">-</span>
+        </div>
+      </div>
+     
+      <div class="recent-results">
+        <h3>Recent Results</h3>
+        <div id="results-list" class="results-list">
+          <div class="loading">Loading...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <!-- Messages -->
+  <div id="message-container" class="message-container"></div>
+</div>

@@ -1,0 +1,1 @@
+fw-util activate component --component-type agent --component-name testAgent --input-json '{"message": "Hello from CLI"}'

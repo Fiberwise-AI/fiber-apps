@@ -1,0 +1,21 @@
+{
+  "name": "data-save-test-app",
+  "version": "0.0.1",
+  "description": "Simple app to test data saving functionality",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "watch": "vite build --watch"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "7.0.0",
+    "fiberwise": "file:../../fiber-sdk-nodejs"
+  },
+  "devDependencies": {
+    "vite": "^6.2.5"
+  },
+  "author": "",
+  "license": "ISC"
+}

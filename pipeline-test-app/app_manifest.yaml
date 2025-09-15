@@ -1,0 +1,120 @@
+app:
+  app_slug: pipeline-test-app
+  category: simple
+  description: Super simple pipeline test with 2 steps - double a number and save
+    result
+  entryPoint: index.js
+  icon: fas fa-calculator
+  models:
+  - description: Test results from pipeline execution
+    fields:
+    - description: Primary key for the result record
+      field_column: result_id
+      is_primary_key: true
+      name: Result ID
+      required: true
+      type: uuid
+    - field_column: input_number
+      name: Input Number
+      required: true
+      type: integer
+    - field_column: doubled_number
+      name: Doubled Number
+      required: true
+      type: integer
+    - field_column: pipeline_session_id
+      name: Pipeline Session ID
+      type: string
+    - description: ID of the user who created this result
+      field_column: user_id
+      is_system_field: true
+      name: User ID
+      type: string
+    - default: CURRENT_TIMESTAMP
+      field_column: created_at
+      is_system_field: true
+      name: Created At
+      type: timestamp
+    model_slug: test-results
+    name: Test Result
+  name: Pipeline Test App
+  publisher: FiberWise
+  routes:
+  - path: /
+    component: pipeline-test-app
+    title: Pipeline Test
+    icon: fas fa-calculator
+  - path: /executions
+    component: pipeline-executions
+    title: Pipeline Executions
+    icon: fas fa-history
+  version: 1.0.92
+pipelines:
+- name: Number Doubler Pipeline
+  slug: number-doubler-pipeline
+  version: 1.0.0
+  description: Simple 2-step pipeline - double a number and save the result
+  structure:
+    version: "1.2"
+    description: Super simple test pipeline with just 2 steps
+    steps:
+    - id: double_number
+      name: Double the Number
+      type: task
+      step_class: DoubleStep
+      parameters:
+        input_number: ${pipeline_input.number}
+      input_schema:
+        type: object
+        properties:
+          input_number:
+            type: integer
+            description: The number to double
+        required:
+        - input_number
+      output_schema:
+        type: object
+        properties:
+          doubled_number:
+            type: integer
+            description: The number multiplied by 2
+    - id: save_result
+      name: Save Result to Database
+      type: task
+      step_class: SaveResultStep
+      parameters:
+        session_id: ${pipeline_execution.session_id}
+        input_number: ${pipeline_input.number}
+        doubled_number: ${steps.double_number.result.doubled_number}
+      input_schema:
+        type: object
+        properties:
+          session_id:
+            type: string
+          input_number:
+            type: integer
+          doubled_number:
+            type: integer
+        required:
+        - input_number
+        - doubled_number
+      output_schema:
+        type: object
+        properties:
+          success:
+            type: boolean
+          result_id:
+            type: string
+    flow:
+      start_at: double_number
+      paths:
+      - from: double_number
+        to: save_result
+        condition:
+          type: always
+      - from: save_result
+        to: end_with_success
+        condition:
+          type: always
+functions: []
+workflows: []

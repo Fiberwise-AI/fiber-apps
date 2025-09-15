@@ -1,0 +1,21 @@
+{
+  "pipeline": {
+    "name": "test_pipeline",
+    "description": "2-step test pipeline",
+    "steps": [
+      {
+        "id": "step1",
+        "class": "ProcessMessageStep",
+        "name": "Process Message"
+      },
+      {
+        "id": "step2", 
+        "class": "FinalizeResultStep", 
+        "name": "Finalize Result"
+      }
+    ],
+    "flow": [
+      {"from": "step1", "to": "step2"}
+    ]
+  }
+}

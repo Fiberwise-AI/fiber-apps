@@ -1,0 +1,88 @@
+agents:
+- agent_type_id: custom
+  description: Processes and analyzes input text to extract key information and sentiment
+  implementation_path: agents/text_processor_agent.py
+  language: python
+  name: TextProcessorAgent
+  version: 1.0.0
+- agent_type_id: custom
+  description: Generates summaries and insights from processed text data
+  implementation_path: agents/summarizer_agent.py
+  language: python
+  name: SummarizerAgent
+  version: 1.0.0
+app:
+  app_slug: simple-test-pipeline
+  category: simple
+  description: Simple 2-step 2-agent test pipeline application
+  entryPoint: index.js
+  icon: fas fa-cogs
+  name: Simple Test Pipeline
+  publisher: FiberWise
+  routes:
+  - component: pipeline-test
+    icon: fas fa-cogs
+    path: /
+    title: Pipeline Test
+  version: 1.0.0
+pipelines:
+- name: "Text Processing Pipeline"
+  description: "2-step pipeline that processes text and generates summaries"
+  is_active: true
+  version: "1.0.0"
+  trigger_config:
+    type: "manual"
+    config:
+      allowed_roles: ["user", "admin"]
+      input_schema:
+        type: "object"
+        required: ["text"]
+        properties:
+          text:
+            type: "string"
+            description: "Text to process and analyze"
+          analysis_type:
+            type: "string"
+            enum: ["basic", "comprehensive"]
+            default: "comprehensive"
+            description: "Type of analysis to perform"
+  execution_config:
+    timeout_seconds: 180
+    max_concurrent_instances: 5
+    logging_level: "info"
+  definition:
+    nodes:
+      - id: "node_1_text_processing"
+        type: "agent"
+        position: { x: 100, y: 150 }
+        data:
+          label: "Process Text"
+          agentId: "TextProcessorAgent"
+          description: "Analyze and extract information from input text"
+          config:
+            extract_keywords: true
+            analyze_sentiment: true
+            max_keywords: 5
+          timeout_seconds: 60
+      - id: "node_2_summary_generation"
+        type: "agent"
+        position: { x: 300, y: 150 }
+        data:
+          label: "Generate Summary"
+          agentId: "SummarizerAgent"
+          description: "Create summary and insights from processed data"
+          config:
+            summary_type: "comprehensive"
+            include_insights: true
+            max_summary_length: 200
+          timeout_seconds: 60
+    edges:
+      - id: "edge_1_to_2"
+        source: "node_1_text_processing"
+        target: "node_2_summary_generation"
+        sourceHandle: "output"
+        targetHandle: "input"
+        data:
+          condition: "output.success === true"
+          transform:
+            type: "pass_through"

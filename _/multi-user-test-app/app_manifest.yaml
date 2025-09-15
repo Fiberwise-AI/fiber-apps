@@ -1,0 +1,67 @@
+app:
+  name: Multi-User Login Test App
+  app_slug: multi-user-test-app
+  version: 0.0.1
+  description: Test app to demonstrate user isolation with multiple user logins and data separation
+  entryPoint: index.js
+  icon: fas fa-users
+  category: simple
+  publisher: FiberWise
+  user_isolation: enforced
+  models:
+  - name: User Message
+    model_slug: user_messages
+    description: Messages created by different users to test isolation
+    fields:
+    - name: Message ID
+      field_column: message_id
+      type: uuid
+      required: true
+      is_primary_key: true
+      description: Unique identifier for each message
+    - name: Message Text
+      field_column: message_text
+      type: text
+      required: true
+      description: The message content from the user
+    - name: Message Category
+      field_column: message_category
+      type: string
+      required: true
+      default: general
+      description: Category of the message
+    - name: User Note
+      field_column: user_note
+      type: text
+      description: Additional notes from the user
+    - name: Created At
+      field_column: created_at
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+      is_system_field: true
+    - name: User ID
+      field_column: user_id
+      type: string
+      is_system_field: true
+      description: User who created this message (auto-assigned)
+  routes:
+  - path: /
+    component: multi-user-app
+    title: Multi-User Test
+    icon: fas fa-users
+  - path: /messages
+    component: user-messages
+    title: My Messages
+    icon: fas fa-envelope
+  - path: /all-users
+    component: all-users-view
+    title: All Users Data
+    icon: fas fa-globe
+agents:
+- name: MessageTestAgent
+  agent_slug: message-test-agent
+  agent_type_id: custom
+  version: 1.0.0
+  description: Agent to test user isolation by creating messages for different users
+  implementation_path: agents/message_test_agent.py
+  language: python

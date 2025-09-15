@@ -1,0 +1,27 @@
+app:
+  app_slug: deep-research
+  name: Deep Research Agent
+  description: An autonomous AI agent that performs deep research on any topic from scratch.
+  version: 1.0.0
+  category: AI Tools
+  icon: fas fa-flask
+  entryPoint: index.js
+  routes:
+    - path: /
+      title: Deep Research
+      component: research-ui
+      icon: fas fa-flask
+
+agents:
+  - name: DeepResearchAgent
+    agent_type_id: custom
+    description: Orchestrates a multi-step research process from planning to synthesis.
+    implementation_path: agents/research_agent.py
+    language: python
+    version: 1.0.0
+
+oauth:
+  authenticators:
+  - file: .fiber/local/oauth/fiberwise_developer.json
+    name: fiberwise-developer
+    type: oauth2

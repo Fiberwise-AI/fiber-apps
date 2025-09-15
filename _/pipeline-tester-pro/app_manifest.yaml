@@ -1,0 +1,322 @@
+app:
+  name: Pipeline Tester Pro
+  app_slug: pipeline-tester-pro
+  version: 1.0.0
+  description: Advanced pipeline testing and development platform with real-time monitoring, execution analytics, and practical application development capabilities
+  entryPoint: index.js
+  icon: fas fa-rocket
+  category: development
+  publisher: FiberWise
+  routes:
+  - path: /
+    component: pipeline-tester-pro
+    title: Pipeline Tester Pro
+    icon: fas fa-rocket
+
+# Data models for comprehensive pipeline testing
+models:
+- description: Pipeline execution test sessions with comprehensive metadata
+  fields:
+  - description: Primary key for test session
+    field_column: session_id
+    is_primary_key: true
+    name: Session ID
+    required: true
+    type: uuid
+  - field_column: session_name
+    name: Session Name
+    required: true
+    type: string
+  - field_column: pipeline_id
+    name: Pipeline ID
+    required: true
+    type: string
+  - field_column: test_config
+    name: Test Configuration
+    type: text
+    description: JSON configuration for test parameters
+  - field_column: input_data
+    name: Input Data
+    type: text
+    description: JSON input data for pipeline execution
+  - field_column: execution_results
+    name: Execution Results
+    type: text
+    description: Complete execution results and node outputs
+  - field_column: performance_metrics
+    name: Performance Metrics
+    type: text
+    description: Execution timing, memory usage, and performance data
+  - field_column: status
+    name: Status
+    type: string
+    default: pending
+    description: Session status (pending, running, completed, failed)
+  - field_column: execution_time_ms
+    name: Execution Time (ms)
+    type: integer
+    description: Total execution time in milliseconds
+  - field_column: error_log
+    name: Error Log
+    type: text
+    description: Error messages and stack traces if execution failed
+  - default: CURRENT_TIMESTAMP
+    field_column: created_at
+    is_system_field: true
+    name: Created At
+    type: timestamp
+  - default: CURRENT_TIMESTAMP
+    field_column: updated_at
+    is_system_field: true
+    name: Updated At
+    type: timestamp
+  model_slug: test_sessions
+  name: TestSession
+
+- description: Individual pipeline execution logs for detailed analysis
+  fields:
+  - description: Primary key for execution log
+    field_column: execution_id
+    is_primary_key: true
+    name: Execution ID
+    required: true
+    type: uuid
+  - field_column: session_id
+    name: Session ID
+    required: true
+    type: uuid
+    description: Reference to parent test session
+  - field_column: execution_index
+    name: Execution Index
+    required: true
+    type: integer
+    description: Sequential execution number within session
+  - field_column: node_results
+    name: Node Results
+    type: text
+    description: JSON results from each pipeline node
+  - field_column: node_timing
+    name: Node Timing
+    type: text
+    description: Performance timing for each node
+  - field_column: final_output
+    name: Final Output
+    type: text
+    description: Final pipeline output data
+  - field_column: status
+    name: Status
+    type: string
+    default: pending
+  - field_column: duration_ms
+    name: Duration (ms)
+    type: integer
+  - default: CURRENT_TIMESTAMP
+    field_column: started_at
+    is_system_field: true
+    name: Started At
+    type: timestamp
+  - field_column: completed_at
+    name: Completed At
+    type: timestamp
+  model_slug: execution_logs
+  name: ExecutionLog
+
+- description: Pipeline test templates for reusable test scenarios
+  fields:
+  - description: Primary key for test template
+    field_column: template_id
+    is_primary_key: true
+    name: Template ID
+    required: true
+    type: uuid
+  - field_column: template_name
+    name: Template Name
+    required: true
+    type: string
+  - field_column: description
+    name: Description
+    type: text
+  - field_column: pipeline_id
+    name: Pipeline ID
+    required: true
+    type: string
+  - field_column: template_config
+    name: Template Configuration
+    type: text
+    description: JSON configuration including input templates and expected outputs
+  - field_column: test_scenarios
+    name: Test Scenarios
+    type: text
+    description: JSON array of test scenarios and validation rules
+  - field_column: tags
+    name: Tags
+    type: string
+    description: Comma-separated tags for categorization
+  - field_column: is_active
+    name: Is Active
+    type: boolean
+    default: true
+  - default: CURRENT_TIMESTAMP
+    field_column: created_at
+    is_system_field: true
+    name: Created At
+    type: timestamp
+  model_slug: test_templates
+  name: TestTemplate
+
+# Sample functions for pipeline testing and development
+functions:
+- name: validatePipelineInput
+  description: Validates input data against pipeline schema requirements
+  version: 1.0.0
+  implementation_path: functions/validate_pipeline_input.py
+  input_schema:
+    type: object
+    properties:
+      pipeline_id:
+        type: string
+        description: ID of the pipeline to validate against
+      input_data:
+        type: object
+        description: Input data to validate
+      validation_mode:
+        type: string
+        enum: [strict, lenient, custom]
+        default: strict
+    required: [pipeline_id, input_data]
+  output_schema:
+    type: object
+    properties:
+      is_valid:
+        type: boolean
+      validation_errors:
+        type: array
+        items:
+          type: string
+      sanitized_input:
+        type: object
+  is_async: false
+  tags: [validation, pipeline, testing]
+
+- name: generateTestData
+  description: Generates synthetic test data for pipeline testing
+  version: 1.0.0
+  implementation_path: functions/generate_test_data.py
+  input_schema:
+    type: object
+    properties:
+      data_type:
+        type: string
+        enum: [user_messages, json_objects, text_samples, numeric_data]
+        description: Type of test data to generate
+      count:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      complexity:
+        type: string
+        enum: [simple, medium, complex]
+        default: medium
+      seed:
+        type: integer
+        description: Random seed for reproducible results
+    required: [data_type]
+  output_schema:
+    type: object
+    properties:
+      generated_data:
+        type: array
+      metadata:
+        type: object
+  is_async: false
+  tags: [testing, data-generation, pipeline]
+
+- name: analyzePipelinePerformance
+  description: Analyzes pipeline execution performance and identifies bottlenecks
+  version: 1.0.0
+  implementation_path: functions/analyze_pipeline_performance.py
+  input_schema:
+    type: object
+    properties:
+      execution_logs:
+        type: array
+        description: Array of execution log data
+      analysis_type:
+        type: string
+        enum: [timing, throughput, error_analysis, resource_usage]
+        default: timing
+      time_window:
+        type: string
+        description: Time window for analysis (e.g., "1h", "1d", "1w")
+        default: "1h"
+    required: [execution_logs]
+  output_schema:
+    type: object
+    properties:
+      performance_summary:
+        type: object
+      bottlenecks:
+        type: array
+      recommendations:
+        type: array
+      charts_data:
+        type: object
+  is_async: true
+  tags: [analytics, performance, pipeline]
+
+# Test agents for pipeline development
+agents:
+- agent_type_id: custom
+  description: Advanced test agent with configurable responses for pipeline testing
+  implementation_path: agents/advanced_test_agent.py
+  language: python
+  name: AdvancedTestAgent
+  version: 1.0.0
+
+- agent_type_id: custom
+  description: Data processing agent for pipeline input/output transformation
+  implementation_path: agents/data_processor_agent.py
+  language: python
+  name: DataProcessorAgent
+  version: 1.0.0
+
+# Pipeline definitions for testing and demonstration
+pipelines:
+- name: "Complex Multi-Agent Pipeline"
+  description: "Advanced pipeline: Test Data Generation → Parallel Processing → Synthesis → Performance Analysis"
+  implementation_path: "pipelines/complex_multi_agent.py"
+  class_name: "ComplexMultiAgentPipeline"
+  is_active: true
+  version: "1.0.0"
+  trigger_config:
+    type: "manual"
+    config:
+      input_schema:
+        type: "object"
+        properties:
+          data_type:
+            type: "string"
+            enum: ["user_messages", "json_objects", "text_samples", "numeric_data"]
+            default: "json_objects"
+            description: "Type of test data to generate"
+          count:
+            type: "integer"
+            minimum: 1
+            maximum: 100
+            default: 10
+            description: "Number of test items to generate"
+          complexity:
+            type: "string"
+            enum: ["simple", "medium", "complex"]
+            default: "medium"
+            description: "Complexity level of generated data"
+          analysis_type:
+            type: "string"
+            enum: ["timing", "throughput", "error_analysis", "resource_usage"]
+            default: "timing"
+            description: "Type of performance analysis to run"
+  execution_config:
+    timeout_seconds: 300
+    max_concurrent_instances: 3
+    logging_level: "info"

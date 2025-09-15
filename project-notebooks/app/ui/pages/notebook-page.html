@@ -1,0 +1,46 @@
+<div class="notebook-page-container">
+  <nav class="breadcrumbs">
+    <a href="/projects" class="breadcrumb-link">Projects</a> / 
+    <a href="/projects" class="breadcrumb-link" id="project-link"><span data-project-name>Project</span></a> / 
+    <span class="current-page">Notebook</span>
+  </nav>
+
+  <div class="notebook-header">
+    <div class="header-left">
+      <h1 id="notebook-title" class="editable" contenteditable="true">Loading notebook...</h1>
+      <span id="notebook-type" class="notebook-type-badge">General</span>
+    </div>
+    <div class="header-actions">
+      <button id="back-button" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Project
+      </button>
+      <button id="save-button" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save
+      </button>
+      <span id="save-status" class="save-status"></span>
+    </div>
+  </div>
+
+  <div class="notebook-tools">
+    <div class="editor-toolbar">
+      <!-- Toolbar buttons can be added here if needed -->
+    </div>
+  </div>
+
+  <div id="editor-container" class="editor-container">
+    <!-- Editor will be initialized and inserted here by JS -->
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>Loading notebook content...</span>
+    </div>
+  </div>
+
+  <div class="notebook-footer">
+    <div class="metadata">
+      <span class="last-edited">Last edited: <time id="last-edited-time">...</time></span>
+    </div>
+    <div class="collaboration-info">
+      <!-- Collaboration indicators would go here -->
+    </div>
+  </div>
+</div>

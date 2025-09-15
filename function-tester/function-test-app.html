@@ -1,0 +1,165 @@
+<div class="container">
+  <h1>Function Tester</h1>
+  <p class="app-description">A simple app to test function execution with DynamicData</p>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Execute Function</h2>
+    </div>
+    <div class="card-body">
+      <div class="function-list">
+        {{#functionOptions}}
+          <button 
+            class="function-selector {{#isSelected}}active{{/isSelected}}" 
+            data-function-id="{{id}}"
+          >
+            {{name}}
+          </button>
+        {{/functionOptions}}
+      </div>
+      
+      <div id="function-form-container">
+        {{^selectedFunction}}<p>Select a function to execute</p>{{/selectedFunction}}
+      </div>
+      
+      {{#executionResult}}
+        <div class="results-container">
+          <h3>Latest Result</h3>
+          <div class="result-display success">
+            <div class="result-header">
+              <div class="result-title">Function Executed Successfully</div>
+              <div class="result-meta">{{executionTimeFormatted}} ms</div>
+            </div>
+            <div class="result-content">
+              <pre>{{resultJson}}</pre>
+            </div>
+          </div>
+        </div>
+      {{/executionResult}}
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Function Statistics</h2>
+    </div>
+    <div class="card-body">
+      {{#isLoading}}
+        <div class="loading-spinner">Loading...</div>
+      {{/isLoading}}
+      {{^isLoading}}
+        {{#noHistory}}
+          <div class="empty-state">
+            No function statistics available. Try running a function above!
+          </div>
+        {{/noHistory}}
+        {{^noHistory}}
+          <div class="stats-grid">
+            {{#functionStats}}
+              <div class="stat-card">
+                <div class="stat-header">
+                  <h4>{{function_name}}</h4>
+                </div>
+                <div class="stat-body">
+                  <div class="stat-row">
+                    <div class="stat-label">Total executions:</div>
+                    <div class="stat-value">{{total_executions}}</div>
+                  </div>
+                  <div class="stat-row">
+                    <div class="stat-label">Success rate:</div>
+                    <div class="stat-value">
+                      <div class="progress-bar">
+                        <div 
+                          class="progress-bar-fill success" 
+                          style="width: {{successPercentage}}%">
+                        </div>
+                      </div>
+                      <div class="stat-text">
+                        {{successful}} / {{total_executions}} ({{successPercentage}}%)
+                      </div>
+                    </div>
+                  </div>
+                  <div class="stat-row">
+                    <div class="stat-label">Avg execution time:</div>
+                    <div class="stat-value">{{avg_execution_time_formatted}} ms</div>
+                  </div>
+                  <div class="stat-row">
+                    <div class="stat-label">Last run:</div>
+                    <div class="stat-value">{{last_execution_formatted}}</div>
+                  </div>
+                </div>
+              </div>
+            {{/functionStats}}
+          </div>
+        {{/noHistory}}
+      {{/isLoading}}
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2>Execution History</h2>
+      <button id="refresh-button" class="refresh-button">
+        <i class="fas fa-sync-alt"></i>
+        Refresh
+      </button>
+    </div>
+    <div class="card-body">
+      {{#isLoading}}
+        <div class="loading-spinner">Loading...</div>
+      {{/isLoading}}
+      
+      {{^isLoading}}
+        {{#noHistory}}
+          <div class="empty-state">
+            No function executions found. Try running a function above!
+          </div>
+        {{/noHistory}}
+        
+        {{^noHistory}}
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Status</th>
+                <th>Input</th>
+                <th>Output/Error</th>
+                <th>Time</th>
+                <th>Executed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#functionHistory}}
+                <tr>
+                  <td>{{function_name}}</td>
+                  <td>
+                    <span class="badge badge-{{statusClass}}">
+                      {{status}}
+                    </span>
+                  </td>
+                  <td>
+                    <pre>{{inputParamsJson}}</pre>
+                  </td>
+                  <td>
+                    {{#error}}
+                      <div class="error-message">
+                        {{error}}
+                      </div>
+                    {{/error}}
+                    {{^error}}
+                      <pre>{{outputDataJson}}</pre>
+                    {{/error}}
+                  </td>
+                  <td>{{executionTimeFormatted}}</td>
+                  <td>{{formattedDate}}</td>
+                </tr>
+              {{/functionHistory}}
+            </tbody>
+          </table>
+        {{/noHistory}}
+      {{/isLoading}}
+    </div>
+  </div>
+</div>
+
+<div class="notification-container"></div>

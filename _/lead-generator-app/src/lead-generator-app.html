@@ -1,0 +1,293 @@
+<div class="lead-generator-app">
+  <div class="app-header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="app-title">
+          <i class="fas fa-bullseye"></i>
+          Lead Generator
+        </h1>
+        <p class="app-subtitle">Automated B2B lead generation with AI qualification</p>
+      </div>
+      <div class="header-right">
+        <button id="new-pipeline-btn" class="primary-button">
+          <i class="fas fa-plus"></i>
+          New Pipeline
+        </button>
+        <button id="view-leads-btn" class="secondary-button">
+          <i class="fas fa-list"></i>
+          View Leads
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Pipeline Creation Panel -->
+    <div id="pipeline-panel" class="pipeline-panel">
+      <div class="panel-header">
+        <h2>
+          <i class="fas fa-search"></i>
+          Find New Leads
+        </h2>
+        <p>Enter your search criteria to find and qualify business leads</p>
+      </div>
+      
+      <form id="pipeline-form" class="pipeline-form">
+        <div class="form-group">
+          <label for="business-type">Business Type</label>
+          <input 
+            type="text" 
+            id="business-type" 
+            placeholder="e.g. marketing agency, law firm, restaurant"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input 
+            type="text" 
+            id="location" 
+            placeholder="e.g. San Francisco, CA"
+            required
+          >
+        </div>
+        
+        <button type="submit" class="primary-button pipeline-submit">
+          <i class="fas fa-play"></i>
+          Start Pipeline
+        </button>
+      </form>
+    </div>
+
+    <!-- Pipeline Execution Panel -->
+    <div id="execution-panel" class="execution-panel hidden">
+      <div class="panel-header">
+        <h2>
+          <i class="fas fa-cogs"></i>
+          Pipeline Execution
+        </h2>
+        <div class="execution-controls">
+          <button id="cancel-pipeline-btn" class="secondary-button">
+            <i class="fas fa-stop"></i>
+            Cancel
+          </button>
+        </div>
+      </div>
+      
+      <div class="pipeline-status">
+        <div class="status-item" id="step-find-businesses">
+          <div class="step-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="step-content">
+            <h3>Finding Businesses</h3>
+            <p>Searching Google Places API...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+        
+        <div class="status-item" id="step-get-details">
+          <div class="step-icon">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div class="step-content">
+            <h3>Getting Business Details</h3>
+            <p>Retrieving contact information...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+        
+        <div class="status-item" id="step-enrich-socials">
+          <div class="step-icon">
+            <i class="fas fa-share-alt"></i>
+          </div>
+          <div class="step-content">
+            <h3>Enriching Social Media</h3>
+            <p>Finding LinkedIn and Twitter profiles...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+        
+        <div class="status-item" id="step-score-quality">
+          <div class="step-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="step-content">
+            <h3>Scoring Lead Quality</h3>
+            <p>AI analysis of lead potential...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+        
+        <div class="status-item" id="step-human-review">
+          <div class="step-icon">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="step-content">
+            <h3>Human Review</h3>
+            <p>Waiting for your approval...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+        
+        <div class="status-item" id="step-save-lead">
+          <div class="step-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="step-content">
+            <h3>Saving Lead</h3>
+            <p>Storing to database...</p>
+          </div>
+          <div class="step-status">
+            <i class="fas fa-clock pending"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Human Review Panel -->
+    <div id="review-panel" class="review-panel hidden">
+      <div class="panel-header">
+        <h2>
+          <i class="fas fa-user-check"></i>
+          Lead Review & Approval
+        </h2>
+        <p>Review the AI-qualified lead and make your decision</p>
+      </div>
+      
+      <div class="lead-summary">
+        <div class="company-info">
+          <h3 id="review-company-name">Company Name</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <strong>Website:</strong>
+              <a id="review-website" href="#" target="_blank">-</a>
+            </div>
+            <div class="info-item">
+              <strong>Phone:</strong>
+              <span id="review-phone">-</span>
+            </div>
+            <div class="info-item">
+              <strong>Address:</strong>
+              <span id="review-address">-</span>
+            </div>
+            <div class="info-item">
+              <strong>LinkedIn:</strong>
+              <a id="review-linkedin" href="#" target="_blank">-</a>
+            </div>
+            <div class="info-item">
+              <strong>Twitter:</strong>
+              <a id="review-twitter" href="#" target="_blank">-</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ai-assessment">
+          <div class="score-display">
+            <div class="score-circle">
+              <span id="review-score">0</span>
+              <small>/100</small>
+            </div>
+            <div class="score-label">AI Quality Score</div>
+          </div>
+          <div class="ai-reasoning">
+            <h4>AI Analysis</h4>
+            <p id="review-reasoning">Loading...</p>
+          </div>
+        </div>
+      </div>
+      
+      <form id="review-form" class="review-form">
+        <div class="decision-buttons">
+          <label class="decision-option approve">
+            <input type="radio" name="decision" value="Approve" required>
+            <div class="decision-content">
+              <i class="fas fa-check-circle"></i>
+              <span>Approve Lead</span>
+              <small>Add to lead database</small>
+            </div>
+          </label>
+          
+          <label class="decision-option reject">
+            <input type="radio" name="decision" value="Reject" required>
+            <div class="decision-content">
+              <i class="fas fa-times-circle"></i>
+              <span>Reject Lead</span>
+              <small>Not a good fit</small>
+            </div>
+          </label>
+        </div>
+        
+        <div class="form-group">
+          <label for="review-notes">Notes (Optional)</label>
+          <textarea 
+            id="review-notes" 
+            placeholder="Add any additional notes about this lead..."
+            rows="3"
+          ></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" id="review-cancel-btn" class="secondary-button">
+            Cancel
+          </button>
+          <button type="submit" class="primary-button">
+            <i class="fas fa-check"></i>
+            Submit Decision
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Leads List Panel -->
+    <div id="leads-panel" class="leads-panel hidden">
+      <div class="panel-header">
+        <h2>
+          <i class="fas fa-list"></i>
+          Generated Leads
+        </h2>
+        <div class="panel-controls">
+          <select id="leads-filter" class="filter-select">
+            <option value="all">All Leads</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="new">New</option>
+          </select>
+          <button id="refresh-leads-btn" class="secondary-button">
+            <i class="fas fa-sync"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+      
+      <div class="leads-container">
+        <div id="leads-loading" class="loading-state hidden">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading leads...</p>
+        </div>
+        
+        <div id="leads-empty" class="empty-state">
+          <i class="fas fa-inbox empty-icon"></i>
+          <h3>No Leads Yet</h3>
+          <p>Run your first pipeline to generate leads</p>
+        </div>
+        
+        <div id="leads-list" class="leads-list"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Success/Error Messages -->
+  <div id="message-container" class="message-container"></div>
+</div>

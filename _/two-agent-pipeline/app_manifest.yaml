@@ -1,0 +1,61 @@
+app:
+  app_slug: two-agent-pipeline
+  name: Two Agent Pipeline App
+  description: Simple app with 2 agents and 1 pipeline
+  version: 1.0.0
+  publisher: FiberWise
+  category: testing
+  icon: fas fa-code-branch
+  entryPoint: index.js
+  routes:
+  - path: /
+    title: Pipeline Home
+    component: pipeline-home
+    icon: fas fa-home
+agents:
+- name: agent-1
+  agent_type_id: custom
+  description: First agent
+  implementation_path: agents/agent_1.py
+  language: python
+  version: 0.1.0
+- name: agent-2
+  agent_type_id: custom
+  description: Second agent
+  implementation_path: agents/agent_2.py
+  language: python
+  version: 0.1.0
+pipelines:
+- name: two-step-pipeline
+  description: Pipeline with 2 agent steps
+  version: 0.1.0
+  input_schema:
+    type: object
+    properties:
+      message:
+        type: string
+        description: Input message
+    required:
+    - message
+  output_schema:
+    type: object
+    properties:
+      success:
+        type: boolean
+      final_result:
+        type: string
+      pipeline_name:
+        type: string
+  structure:
+    steps:
+    - id: step1
+      name: First Processing Step
+      class: FirstProcessingStep
+      implementation_path: pipelines/steps/first_processing_step.py
+    - id: step2
+      name: Second Processing Step
+      class: SecondProcessingStep
+      implementation_path: pipelines/steps/second_processing_step.py
+    flow:
+    - from: step1
+      to: step2

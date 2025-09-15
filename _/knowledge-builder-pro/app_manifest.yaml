@@ -1,0 +1,320 @@
+app:
+  name: Knowledge Builder Pro
+  app_slug: knowledge-builder-pro
+  version: 1.0.0
+  description: Deep research knowledge builder with conversational agents - Wikipedia API, web scraping, and collaborative research synthesis
+  entryPoint: index.js
+  icon: fas fa-brain
+  category: research
+  publisher: FiberWise
+  routes:
+  - path: /
+    component: knowledge-builder-pro
+    title: Knowledge Builder Pro
+    icon: fas fa-brain
+
+# Data models for research state management
+models:
+- description: Research projects and their current state
+  fields:
+  - description: Primary key for research project
+    field_column: project_id
+    is_primary_key: true
+    name: Project ID
+    required: true
+    type: uuid
+  - field_column: project_name
+    name: Project Name
+    required: true
+    type: string
+  - field_column: research_topic
+    name: Research Topic
+    required: true
+    type: string
+  - field_column: research_scope
+    name: Research Scope
+    type: text
+    description: JSON configuration for research parameters
+  - field_column: current_phase
+    name: Current Phase
+    type: string
+    description: Current phase of research (scoping, gathering, processing, synthesis)
+  - field_column: status
+    name: Status
+    type: string
+    description: Project status (active, completed, paused, error)
+  - field_column: wikipedia_data
+    name: Wikipedia Data
+    type: text
+    description: JSON data from Wikipedia API research
+  - field_column: web_scraped_data
+    name: Web Scraped Data
+    type: text
+    description: JSON data from web scraping research
+  - field_column: processed_insights
+    name: Processed Insights
+    type: text
+    description: JSON insights from data processing
+  - field_column: agent_conversations
+    name: Agent Conversations
+    type: text
+    description: JSON log of agent-to-agent conversations
+  - field_column: final_knowledge_base
+    name: Final Knowledge Base
+    type: text
+    description: JSON structured knowledge base output
+  - field_column: created_at
+    name: Created At
+    type: datetime
+  - field_column: updated_at
+    name: Updated At
+    type: datetime
+  model_name: research_projects
+  table_name: research_projects
+
+- description: Individual research sources and their data
+  fields:
+  - description: Primary key for research source
+    field_column: source_id
+    is_primary_key: true
+    name: Source ID
+    required: true
+    type: uuid
+  - field_column: project_id
+    name: Project ID
+    required: true
+    type: uuid
+    description: Reference to research project
+  - field_column: source_type
+    name: Source Type
+    type: string
+    description: Type of source (wikipedia, web_scrape, manual)
+  - field_column: source_url
+    name: Source URL
+    type: string
+    description: URL of the source
+  - field_column: source_title
+    name: Source Title
+    type: string
+  - field_column: raw_content
+    name: Raw Content
+    type: text
+    description: Raw scraped/retrieved content
+  - field_column: processed_content
+    name: Processed Content
+    type: text
+    description: Cleaned and processed content
+  - field_column: key_insights
+    name: Key Insights
+    type: text
+    description: JSON extracted key insights
+  - field_column: relevance_score
+    name: Relevance Score
+    type: float
+    description: AI-scored relevance to research topic
+  - field_column: scraped_at
+    name: Scraped At
+    type: datetime
+  model_name: research_sources
+  table_name: research_sources
+
+- description: Agent conversation logs for collaborative research
+  fields:
+  - description: Primary key for conversation entry
+    field_column: conversation_id
+    is_primary_key: true
+    name: Conversation ID
+    required: true
+    type: uuid
+  - field_column: project_id
+    name: Project ID
+    required: true
+    type: uuid
+  - field_column: agent_from
+    name: Agent From
+    type: string
+    description: Name of the agent sending the message
+  - field_column: agent_to
+    name: Agent To
+    type: string
+    description: Name of the agent receiving the message
+  - field_column: message_type
+    name: Message Type
+    type: string
+    description: Type of message (question, insight, hypothesis, critique)
+  - field_column: message_content
+    name: Message Content
+    type: text
+    description: The actual message content
+  - field_column: context_data
+    name: Context Data
+    type: text
+    description: JSON context data referenced in the message
+  - field_column: response_required
+    name: Response Required
+    type: boolean
+    description: Whether this message requires a response
+  - field_column: timestamp
+    name: Timestamp
+    type: datetime
+  model_name: agent_conversations
+  table_name: agent_conversations
+
+# Functions for research pipeline
+functions:
+- name: wikipediaApiScraper
+  description: Scrapes Wikipedia API for comprehensive topic research with related articles
+  version: 1.0.0
+  implementation_path: functions/wikipedia_api_scraper.py
+  input_schema:
+    type: object
+    properties:
+      topic:
+        type: string
+        description: Main research topic
+      max_articles:
+        type: integer
+        minimum: 1
+        maximum: 20
+        default: 5
+        description: Maximum number of related articles to fetch
+      include_references:
+        type: boolean
+        default: true
+        description: Whether to include article references
+      language:
+        type: string
+        default: "en"
+        description: Wikipedia language code
+    required: [topic]
+  output_schema:
+    type: object
+    properties:
+      main_article:
+        type: object
+        description: Main Wikipedia article data
+      related_articles:
+        type: array
+        description: Array of related article data
+      references:
+        type: array
+        description: External references from articles
+      metadata:
+        type: object
+        description: Scraping metadata and statistics
+  is_async: true
+  tags: [research, wikipedia, api]
+
+- name: synthesizeKnowledge
+  description: Final synthesis of all research data into structured knowledge base
+  version: 1.0.0
+  implementation_path: functions/synthesize_knowledge.py
+  input_schema:
+    type: object
+    properties:
+      project_id:
+        type: string
+        description: Research project ID
+      synthesis_mode:
+        type: string
+        enum: [comprehensive, summary, insights_only]
+        default: comprehensive
+        description: Type of synthesis to perform
+    required: [project_id]
+  output_schema:
+    type: object
+    properties:
+      knowledge_base:
+        type: object
+        description: Structured knowledge base
+      key_findings:
+        type: array
+        description: Main research findings
+      confidence_scores:
+        type: object
+        description: Confidence scores for different insights
+      recommendations:
+        type: array
+        description: Recommended next research steps
+  is_async: true
+  tags: [research, synthesis, knowledge]
+
+# Agents for collaborative research
+agents:
+- agent_type_id: custom
+  description: Web scraping agent using Playwright for deep content extraction
+  implementation_path: agents/playwright_scraper_agent.py
+  language: python
+  name: PlaywrightScraperAgent
+  version: 1.0.0
+
+- agent_type_id: custom
+  description: Data processing agent that cleans, structures, and analyzes research data
+  implementation_path: agents/data_processor_agent.py
+  language: python
+  name: DataProcessorAgent
+  version: 1.0.0
+
+- agent_type_id: custom
+  description: Research coordinator agent that manages the research process and agent conversations
+  implementation_path: agents/research_coordinator_agent.py
+  language: python
+  name: ResearchCoordinatorAgent
+  version: 1.0.0
+
+- agent_type_id: custom
+  description: Domain expert agent that provides specialized knowledge and critiques
+  implementation_path: agents/domain_expert_agent.py
+  language: python
+  name: DomainExpertAgent
+  version: 1.0.0
+
+- agent_type_id: custom
+  description: Hypothesis generator agent that creates and tests research hypotheses
+  implementation_path: agents/hypothesis_agent.py
+  language: python
+  name: HypothesisAgent
+  version: 1.0.0
+
+# Pipeline definitions for knowledge building
+pipelines:
+- name: "Deep Knowledge Builder Pipeline"
+  description: "Wikipedia API → Playwright Scraper → Data Processor → Conversational Analysis → Knowledge Synthesis"
+  implementation_path: "pipelines/knowledge_builder_pipeline.py"
+  class_name: "KnowledgeBuilderPipeline"
+  is_active: true
+  version: "1.0.0"
+  trigger_config:
+    type: "manual"
+    config:
+      input_schema:
+        type: "object"
+        properties:
+          research_topic:
+            type: "string"
+            description: "Main topic to research deeply"
+          research_scope:
+            type: "string"
+            enum: ["narrow", "broad", "comprehensive"]
+            default: "broad"
+            description: "Scope of research to perform"
+          max_sources:
+            type: "integer"
+            minimum: 5
+            maximum: 50
+            default: 15
+            description: "Maximum number of sources to gather"
+          enable_agent_conversations:
+            type: "boolean"
+            default: true
+            description: "Enable agents to converse about findings"
+          synthesis_depth:
+            type: "string"
+            enum: ["summary", "detailed", "comprehensive"]
+            default: "detailed"
+            description: "Depth of final knowledge synthesis"
+        required: ["research_topic"]
+  execution_config:
+    timeout_seconds: 1800  # 30 minutes for deep research
+    max_concurrent_instances: 2
+    logging_level: "info"

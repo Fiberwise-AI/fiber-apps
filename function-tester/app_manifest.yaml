@@ -1,0 +1,91 @@
+app:
+  name: Function Tester
+  app_slug: function-tester
+  version: 0.0.36
+  description: A version simple app to test function execution with Function Execution
+    Results
+  entryPoint: index.js
+  icon: fas fa-code
+  category: development
+  publisher: FiberWise
+  routes:
+  - path: /
+    component: function-test-app
+    title: Function Tester
+    icon: fas fa-code
+functions:
+- name: helloWorldFunction
+  description: A more simple hello world function that greets the user
+  version: 1.0.1
+  implementation_path: functions/hello_world.py
+  input_schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name to greet
+      language:
+        type: string
+        description: Language for the greeting
+        enum:
+        - English
+        - Spanish
+        - French
+    required:
+    - name
+  output_schema:
+    type: object
+    properties:
+      message:
+        type: string
+      timestamp:
+        type: string
+      language:
+        type: string
+  is_async: false
+  tags:
+  - demo
+  - hello-world
+- name: testUploadBundleEntity
+  description: Test function for upload bundle entity functionality
+  version: 1.0.0
+  implementation_path: functions/test_upload_bundle.py
+  input_schema:
+    type: object
+    properties:
+      entity_name:
+        type: string
+        description: Name of the entity to test
+      entity_type:
+        type: string
+        description: Type of the entity
+      content:
+        type: string
+        description: Test content for the entity
+    required: []
+  output_schema:
+    type: object
+    properties:
+      status:
+        type: string
+      entity_name:
+        type: string
+      entity_type:
+        type: string
+      bundle_size:
+        type: number
+      files_created:
+        type: array
+        items:
+          type: string
+      test_result:
+        type: string
+      metadata:
+        type: object
+      error_message:
+        type: string
+  is_async: false
+  tags:
+  - testing
+  - bundle-entity
+  - upload

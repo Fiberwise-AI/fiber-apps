@@ -1,0 +1,46 @@
+{
+  "name": "Email Agent App",
+  "id": "email-agent-app",
+  "version": "1.0.0",
+  "description": "Multi-provider email client with AI-powered analysis",
+  "author": "FiberWise Core Team",
+  "entry_point": "index.js",
+  "icon": "fa-envelope",
+  "color": "#4f46e5",
+  "routes": [
+    {
+      "path": "/",
+      "title": "Email Client",
+      "icon": "fa-envelope"
+    },
+    {
+      "path": "/settings",
+      "title": "Settings",
+      "icon": "fa-cog"
+    }
+  ],
+  "required_agents": [
+    "email-agent"
+  ],
+  "functions": [
+    {
+      "id": "get_recent_emails",
+      "name": "Get Recent Emails",
+      "description": "Fetch recent emails from a provider",
+      "file": "functions/get_recent_emails.py"
+    },
+    {
+      "id": "get_email",
+      "name": "Get Email Details",
+      "description": "Fetch detailed email content by message ID",
+      "file": "functions/get_email.py"
+    }
+  ],
+  "permissions": [
+    "credentials.oauth",
+    "credentials.connections"
+  ],
+  "settings": {
+    "oauth_config_path": "config/oauth_config.json"
+  }
+}

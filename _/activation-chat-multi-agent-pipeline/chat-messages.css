@@ -1,0 +1,565 @@
+/* Chat Messages Component Styles */
+:host {
+  display: block;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --primary-color: #4f46e5;
+  --secondary-color: #6b7280;
+  --background-color: #f9fafb;
+  --surface-color: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+}
+
+/* Main container */
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Loading and state containers */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.empty-state, .new-chat-state, .error-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+.new-chat-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.new-chat-icon {
+  font-size: 3rem;
+  color: #4f46e5;
+  margin-bottom: 1rem;
+}
+
+.new-chat-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.new-chat-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+}
+
+.error-state {
+  color: var(--error-color);
+}
+
+/* Spinner animation */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Agent icons and message headers */
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.user-icon {
+  color: #3b82f6;
+  width: 16px;
+}
+
+.agent-icon {
+  color: #10b981;
+  width: 16px;
+}
+
+.system-icon {
+  color: #0ea5e9 !important;
+}
+
+.message-label {
+  color: var(--text-primary);
+}
+
+/* Loading states */
+.activation-message.loading .output-bubble {
+  background-color: #f8f9fa;
+  border: 1px dashed #d1d5db;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.loading-dot {
+  width: 4px;
+  height: 4px;
+  background-color: #6b7280;
+  border-radius: 50%;
+  animation: loading-pulse 1.4s infinite ease-in-out;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes loading-pulse {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.loading-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-style: italic;
+  color: #6b7280;
+  padding: 0.5rem 0;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Activation messages */
+.activation-message {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activation-message .message-time {
+  text-align: right;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.activation-message .message-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Input and output bubbles */
+.input-bubble, .output-bubble {
+  padding: 10px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.input-bubble {
+  align-self: flex-end;
+  background-color: #e7f5ff;
+  border: 1px solid #d0e8ff;
+  margin-left: auto;
+  max-width: 80%;
+  border-bottom-right-radius: 2px;
+  color: #1a56db;
+}
+
+.output-bubble {
+  align-self: flex-start;
+  background-color: #f0f7f0;
+  border: 1px solid #d8ebd8;
+  margin-right: auto;
+  max-width: 80%;
+  border-bottom-left-radius: 2px;
+  color: #1f7a1f;
+}
+
+.output-bubble.pending {
+  background-color: #f5f5f5;
+  border: 1px dashed #ccc;
+}
+
+/* Message content */
+.message-content {
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-content p {
+  margin: 0 0 12px 0;
+}
+
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Retry button */
+.retry-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.retry-btn:hover {
+  background-color: #e9ecef;
+}
+
+/* Message states */
+.pending-message, .empty-message, .error-message {
+  font-style: italic;
+  color: #999;
+  padding: 8px 0;
+}
+
+.error-message {
+  color: #e74c3c;
+}
+
+/* Provider selector */
+.provider-selector {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.provider-selector label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.provider-selector select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.provider-info {
+  padding: 8px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  border-left: 3px solid #4285f4;
+}
+
+.provider-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.provider-label {
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+/* System message styles for ChatSummarizerAgent */
+.activation-message.system-message {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-left: 4px solid #3b82f6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-request-section {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.user-request-section .message-header {
+  color: #1d4ed8;
+}
+
+.user-request-section .user-icon {
+  color: #2563eb;
+}
+
+.system-analysis-section {
+  background-color: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.system-analysis-section .message-header {
+  color: #0369a1;
+  border-bottom: 1px solid #e0f2fe;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.system-content {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+/* Enhanced styling for system message time */
+.activation-message.system-message .message-time {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+/* System message retry button styling */
+.activation-message.system-message .retry-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.activation-message.system-message .retry-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Make JSON output more readable in system messages */
+.system-content pre,
+.system-content code {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.system-content pre {
+  padding: 0.75rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.system-content code {
+  padding: 0.25rem 0.5rem;
+}
+
+/* Analysis sections formatting */
+.analysis-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.analysis-section:last-child {
+  margin-bottom: 0;
+}
+
+.analysis-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  border-bottom: 1px solid #e0f2fe;
+  padding-bottom: 0.5rem;
+}
+
+.analysis-title i {
+  font-size: 0.875rem;
+  color: #3b82f6;
+}
+
+.analysis-content {
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Insights list */
+.insights-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style-type: none;
+}
+
+.insights-list li {
+  position: relative;
+  padding: 0.5rem 0;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.insights-list li:before {
+  content: "💡";
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+}
+
+/* Topics grid */
+.topics-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.topic-item {
+  background-color: rgba(59, 130, 246, 0.05);
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.topic-name {
+  font-weight: 600;
+  color: #1d4ed8;
+  margin-bottom: 0.25rem;
+}
+
+.topic-description {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.topic-coverage {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Statistics grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 0.75rem;
+  background-color: rgba(16, 185, 129, 0.05);
+  border: 1px solid #a7f3d0;
+  border-radius: 6px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #374151;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Error styling for summarizer agent */
+.analysis-error {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  border-left: 4px solid #ef4444;
+}
+
+.error-title {
+  color: #dc2626 !important;
+  border-bottom: 1px solid #fecaca !important;
+}
+
+.error-title i {
+  color: #ef4444 !important;
+}
+
+.error-content {
+  color: #7f1d1d;
+  line-height: 1.5;
+}
+
+.error-content p {
+  margin: 0.5rem 0;
+}
+
+.error-content strong {
+  color: #991b1b;
+}
+
+.error-details {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(254, 202, 202, 0.3);
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.error-details p {
+  margin: 0.25rem 0;
+}
